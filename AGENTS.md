@@ -1,7 +1,7 @@
-# Working on NashDex
+# Working on vgc-gto-solver
 
 Read README.md, PROGRESS.md, docs/algorithms.md and docs/simulator-research.md first.
-The user's repository is named `vgc-solver`; the Rust package and project are NashDex.
+Repository, Rust package and application are named `vgc-gto-solver`.
 The enclosing directory is an unrelated Pokémon LLM repository. Work only here.
 
 ## Architecture
@@ -15,7 +15,15 @@ The enclosing directory is an unrelated Pokémon LLM repository. Work only here.
 - `solver`: generic rectangular constant-sum games. Keep Pokémon mechanics out of it.
 - `search`: root solve, runtime breakdown and interpretation/uncertainty diagnostics.
 - `benchmark`: measured throughput and paired side-swapped policy experiments.
-- `main`: CLI only. No frontend in this phase.
+- `main`: preserved research CLI; `src/bin/server.rs` starts the local native web service.
+- `web` (Rust): Axum validation, bounded cancellable jobs, safe paste fetch and seeded replay.
+- `control`: cancellation and actual progress counters; preserve existing uninstrumented APIs.
+- `web/src`: React/TypeScript workspace, editors/imports/results and virtualized matrix.
+- `data/web-catalog.json`: versioned local UI data; native validation filters all presets.
+- UI development is explicitly prioritized by the user. Read docs/web-app.md and docs/ui-research-and-data.md.
+- Keep utility perspectives explicit, never fabricate usage/presets/results, and label suggested sets.
+- Browser text imports must never silently convert main-series EVs to Champions SP.
+- Replay preserves state; do not treat projections as universal lossless checkpoints.
 
 ## Correctness conventions
 
@@ -41,6 +49,8 @@ Keep seeds stable across Rayon scheduling for fixed-work runs. Budget runs may d
 
 Run `cargo fmt --all -- --check`, `cargo clippy --locked --all-targets -- -D warnings`,
 `cargo test --locked --release` and relevant reference checks before finishing.
+Run `npm ci`, `npm run build`, `npx playwright install chromium`, and `npm run test:e2e`
+for frontend/native integration changes. Use `npm run dev` to start both services.
 No tests may silently skip missing game data. It is bundled.
 Research scripts use a local virtual environment and `scripts/requirements-research.txt`.
 Reference clones and build artifacts belong under ignored `.cache/` or outside the repository.

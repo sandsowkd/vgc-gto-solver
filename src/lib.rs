@@ -1,4 +1,4 @@
-//! NashDex estimates a root matrix under fixed continuation policies.
+//! vgc-gto-solver estimates a root matrix under fixed continuation policies.
 //! Its equilibrium is not an equilibrium of the full extensive-form battle.
 pub mod actions;
 pub mod battle;
@@ -11,3 +11,6 @@ pub mod search;
 pub mod solver;
 
 pub type Result<T> = std::result::Result<T, String>;
+
+pub mod control;
+pub mod web;

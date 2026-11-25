@@ -1,7 +1,7 @@
 # Simulator investigation
 
 Investigated 2026-11-24 by reading and executing the actual source. Upstream claims are not
-substitutes for NashDex's tests. All revision links below are frozen for reproducibility.
+substitutes for vgc-gto-solver's tests. All revision links below are frozen for reproducibility.
 
 ## Decision and pins
 
@@ -12,7 +12,7 @@ is bundled with a SHA-256 and exporter provenance in `data/manifest.json`; runti
 network, Python or Node. Rust 1.100.0 is pinned separately.
 
 The engine's intended format is `gen9championsvgc2026regmc`: doubles, bring six/pick four,
-Champions stat points, Mega Evolution, no Terastallization. NashDex deliberately uses one or two
+Champions stat points, Mega Evolution, no Terastallization. vgc-gto-solver deliberately uses one or two
 Pokémon per side, bypassing tournament roster-size validation for its restricted no-reserve game.
 This does not make a two-mon team a tournament-legal roster. M-B/OTS/singles/custom exports are
 described upstream but were not integrated or validated here; no support for future regulations
@@ -23,19 +23,19 @@ or exact equivalence to the official game is claimed.
 | Question | Finding and inspected source |
 | --- | --- |
 | Two-mon initialization? | Yes. `Battle::from_sets_rng`/`from_teams_rng` builds a side with the supplied mons; `choose_team` caps its pick to available mons. Tests execute 2v2, 2v1 and 1v1. Doubles retains two active slots; empty/fainted slots produce Pass. |
-| Arbitrary states? | Public `Battle`, `Side`, `Mon` and `Field` fields allow controlled state construction. `Battle::from_projection` imports the engine/Showdown projection at a request boundary. It rejects queued mid-turn actions and unsupported condition IDs. NashDex accepts nonterminal move-boundary projections only, validates roster/counts/stats/PP/support, and also offers typed HP/status/stage/PP/field overrides and exact choice replay. |
+| Arbitrary states? | Public `Battle`, `Side`, `Mon` and `Field` fields allow controlled state construction. `Battle::from_projection` imports the engine/Showdown projection at a request boundary. It rejects queued mid-turn actions and unsupported condition IDs. vgc-gto-solver accepts nonterminal move-boundary projections only, validates roster/counts/stats/PP/support, and also offers typed HP/status/stage/PP/field overrides and exact choice replay. |
 | Cloning? | `Battle: Clone`, with an `Arc<Dex>` sharing immutable interned data. State vectors and owned scratch/log data are copied. Logging is disabled and startup logs cleared for rollouts. Actual clone and rollout measurements are in `docs/benchmarks.md`. |
 | Serialization? | `projection()` exports canonical JSON, not a serde serialization of the whole Rust object. The normal xoshiro RNG is not restored by projection import; import accepts a new seed. Advanced histories should use teams plus replay, which preserves all engine state. No claim of arbitrary mid-turn or universal lossless checkpoint restore. |
 | Hashing? | `BattleStateKey` has Eq/Hash, excluding RNG position, logs and diagnostics. It includes a retained shared-Dex pointer identity. It is useful inside one process and shared Dex allocation, not a portable content hash or player information-set key. Tests verify clone independence and a pending-choice key change. Transposition caching is not yet implemented. |
-| Legal joint actions? | `joint_choices` combines each slot's exact `slot_options`, preserving forced actions, target locations, move PP/disable/lock, Struggle, fainted slots and at most one Mega per side. `player_choices` instead preserves hidden disables; NashDex intentionally uses true legality for perfect information. Every enumerated action in the principal fixture is checked through the text choice parser. |
-| Simultaneous execution? | `choose_structured` submits one side and commits only when all required sides have selected. It trusts structured input, so NashDex feeds it only simulator-enumerated actions. Both policies choose before either side is submitted. Voluntary switches are excluded and rosters cannot contain reserves. Forced revival requests can still refer to the two existing mons. |
+| Legal joint actions? | `joint_choices` combines each slot's exact `slot_options`, preserving forced actions, target locations, move PP/disable/lock, Struggle, fainted slots and at most one Mega per side. `player_choices` instead preserves hidden disables; vgc-gto-solver intentionally uses true legality for perfect information. Every enumerated action in the principal fixture is checked through the text choice parser. |
+| Simultaneous execution? | `choose_structured` submits one side and commits only when all required sides have selected. It trusts structured input, so vgc-gto-solver feeds it only simulator-enumerated actions. Both policies choose before either side is submitted. Voluntary switches are excluded and rosters cannot contain reserves. Forced revival requests can still refer to the two existing mons. |
 | Target representation? | `SlotChoice::Move { slot, target, mega }`: move slot is zero-based; targets 1/2 are enemy slots, -1/-2 own slots, 0 auto/spread/self. The simulator is authoritative for targeting and execution; policy damage estimates use these fields heuristically. |
-| Randomness? | Normal `Rng` is seeded xoshiro256++; reference mode uses Showdown's `sodium,<hex>` generator with matching draw order. NashDex derives independent streams for each cell/sample and each policy. Fixed-work matrices are identical with one or two threads in tests. |
-| Exact chance outcomes? | Yes, an **experimental** `enumerate_outcomes[_within]` API and text wrappers replay explicit chance paths and merge matching state keys. `Precise` preserves accuracy/crits/all damage rolls. Default path cap is 20,000; overflow is an error. `DamageEndpoints` is an approximation and is not used by NashDex. A tiny forced-win endgame is verified using Precise probability mass and terminal outcomes. Full-turn branching makes this unsuitable as the default matrix estimator. |
+| Randomness? | Normal `Rng` is seeded xoshiro256++; reference mode uses Showdown's `sodium,<hex>` generator with matching draw order. vgc-gto-solver derives independent streams for each cell/sample and each policy. Fixed-work matrices are identical with one or two threads in tests. |
+| Exact chance outcomes? | Yes, an **experimental** `enumerate_outcomes[_within]` API and text wrappers replay explicit chance paths and merge matching state keys. `Precise` preserves accuracy/crits/all damage rolls. Default path cap is 20,000; overflow is an error. `DamageEndpoints` is an approximation and is not used by vgc-gto-solver. A tiny forced-win endgame is verified using Precise probability mass and terminal outcomes. Full-turn branching makes this unsuitable as the default matrix estimator. |
 | Entity representation? | Species, moves, items and abilities are interned integer IDs into `Dex` loaded from JSON. `MonSet.points` is six Champions stat points. HP=`base+points+75`; other stats start at `base+points+20` before nature. Main-series EV spreads are rejected (32/stat, 66 total). Engine move/category/target types are enums; persistent effects use typed state. |
 | Damage oracle? | `calc`/`calc_all` use the engine's own damage code in read-only probe mode, exposing 16 normal/critical rolls, accuracy, expected damage and KO chance. `order_odds` accounts for priority/speed effects. Policies cache these results per slot option; the state-preservation test covers all baseline calls. |
-| Teams bundled? | Upstream has four verification teams and a separate 766-team VGCPastes pool with provenance IDs, dated November 4, 2026. The latter is not part of its Rust crate. NashDex does not redistribute that player-authored pool; example teams here are authored illustrative sets checked against the pinned learnsets. |
-| Team import? | Rust `parse_packed` accepts Showdown's packed strings, not human-readable paste text or URLs. The upstream Node harness uses `Teams.import`/`Teams.pack`; its Python layer has further helpers. NashDex supports structured JSON and packed teams, with no runtime URL fetcher or human-text importer. |
+| Teams bundled? | Upstream has four verification teams and a separate 766-team VGCPastes pool with provenance IDs, dated November 4, 2026. The latter is not part of its Rust crate. vgc-gto-solver does not redistribute that player-authored pool; example teams here are authored illustrative sets checked against the pinned learnsets. |
+| Team import? | Rust `parse_packed` accepts Showdown's packed strings, not human-readable paste text or URLs. The upstream Node harness uses `Teams.import`/`Teams.pack`; its Python layer has further helpers. vgc-gto-solver supports structured JSON and packed teams, with no runtime URL fetcher or human-text importer. |
 
 Relevant inspected engine files: `src/battle/{mod,choices,choose_text,enumerate,state_key}.rs`,
 `src/state/*`, `src/{rng,calc,outcome}.rs`, `src/projection/{mod,import}.rs`,
@@ -45,7 +45,7 @@ Relevant inspected engine files: `src/battle/{mod,choices,choose_text,enumerate,
 
 - `examples/audit_simulator.rs` inspected support against the **bundled data**: 510/510 moves,
   166/166 items, 221/224 abilities. Unsupported abilities are Gulp Missile, Ice Face and Shields
-  Down. Upstream associates them with formes outside the legal Reg M-C roster. NashDex rejects
+  Down. Upstream associates them with formes outside the legal Reg M-C roster. vgc-gto-solver rejects
   unsupported requested entities, including in advanced projections.
 - `scripts/validate_showdown.py`: 15 seeded complete games, three authored matchups including
   a mirrored speed-tie fixture, **183 full-state comparisons after individual choice inputs**.
@@ -61,7 +61,7 @@ Relevant inspected engine files: `src/battle/{mod,choices,choose_text,enumerate,
   locally. We did not patch either dependency to hide this reference limitation.
 - `benchmarks/results.json` contains actual clone, enumeration, throughput, thread scaling,
   budget, seed-stability and playing-strength measurements. No upstream advertised speed was
-  used as a NashDex benchmark.
+  used as a vgc-gto-solver benchmark.
 
 Reference setup creates a CommonJS scope in ignored `.cache/reference/package.json`. This
 prevents an enclosing workspace with `type: module` from reinterpreting the upstream Node
@@ -92,7 +92,7 @@ harness. No tracked simulator source or enclosing workspace configuration is mod
 Ninjask declares MIT; its `NOTICE` identifies Showdown code/data as MIT and includes Showdown's
 copyright/permission notice. Both exact notices are retained in `docs/licenses/` and identified
 in `THIRD_PARTY_NOTICES.md`. The curated VGCPastes pool has separate player/source attribution
-and was not vendored. No official artwork or media is included. No blanket NashDex license has
+and was not vendored. No official artwork or media is included. No blanket vgc-gto-solver license has
 been selected on the owner's behalf; the repository therefore needs an explicit licensing
 decision before it can be advertised as generally reusable open-source software.
 

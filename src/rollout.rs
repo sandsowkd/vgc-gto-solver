@@ -34,6 +34,18 @@ pub fn play(
     max_turns: u32,
     deadline: Option<Instant>,
 ) -> crate::Result<Rollout> {
+    play_controlled(root, first, policies, seed, max_turns, deadline, None)
+}
+
+pub fn play_controlled(
+    root: &Battle,
+    first: Option<[JointAction; 2]>,
+    policies: [PolicyKind; 2],
+    seed: u64,
+    max_turns: u32,
+    deadline: Option<Instant>,
+    control: Option<&crate::control::Control>,
+) -> crate::Result<Rollout> {
     let mut b = root.clone();
     b.rng = Rng::new(mix(seed));
     let mut prng = [Rng::new(mix(seed ^ 0xa1)), Rng::new(mix(seed ^ 0xb2))];
@@ -47,6 +59,9 @@ pub fn play(
         && b.turn.saturating_sub(start) < max_turns
         && decisions < max_turns.saturating_mul(4)
     {
+        if let Some(c) = control {
+            c.check()?;
+        }
         if deadline.is_some_and(|d| Instant::now() >= d) {
             return Ok(Rollout {
                 utility: None,

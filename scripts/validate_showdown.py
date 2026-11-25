@@ -10,7 +10,7 @@ import subprocess
 import tempfile
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--binary', default='target/release/nashdex')
+parser.add_argument('--binary', default='target/release/vgc-gto-solver')
 parser.add_argument('--engine', default='.cache/reference/ninjask')
 parser.add_argument('--showdown', default='.cache/reference/showdown')
 parser.add_argument('--seeds', type=int, default=5)

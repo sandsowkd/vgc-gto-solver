@@ -1,0 +1,1675 @@
+{
+  "seed": 20261124,
+  "scipy": "1.18.1",
+  "numpy": "2.5.5",
+  "independent_games": 64,
+  "comparisons": 128,
+  "max_value_error": 0.0009933804384532063,
+  "max_nash_gap": 0.003950704947230488,
+  "records": [
+    {
+      "game": 0,
+      "shape": [
+        2,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.2891625215388327,
+      "estimated_value": -0.28915727793808227,
+      "absolute_value_error": 5.243600750437505e-06,
+      "nash_gap": 0.0014040521851622079,
+      "iterations": 250000
+    },
+    {
+      "game": 0,
+      "shape": [
+        2,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.2891625215388327,
+      "estimated_value": -0.28915045216612995,
+      "absolute_value_error": 1.2069372702760983e-05,
+      "nash_gap": 0.0009866921992843225,
+      "iterations": 133400
+    },
+    {
+      "game": 1,
+      "shape": [
+        6,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.6217623221997646,
+      "estimated_value": 1.6208037957224866,
+      "absolute_value_error": 0.00095852647727801,
+      "nash_gap": 0.00095852647727801,
+      "iterations": 1700
+    },
+    {
+      "game": 1,
+      "shape": [
+        6,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.6217623221997646,
+      "estimated_value": 1.6208037957224866,
+      "absolute_value_error": 0.00095852647727801,
+      "nash_gap": 0.00095852647727801,
+      "iterations": 1700
+    },
+    {
+      "game": 2,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.19627176024175505,
+      "estimated_value": 0.19627358219401433,
+      "absolute_value_error": 1.8219522592843873e-06,
+      "nash_gap": 0.002845265933415886,
+      "iterations": 250000
+    },
+    {
+      "game": 2,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.19627176024175505,
+      "estimated_value": 0.1967429537745634,
+      "absolute_value_error": 0.0004711935328083616,
+      "nash_gap": 0.000997857465020624,
+      "iterations": 31500
+    },
+    {
+      "game": 3,
+      "shape": [
+        2,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.15463475932518156,
+      "estimated_value": 0.1551176109443737,
+      "absolute_value_error": 0.00048285161919214836,
+      "nash_gap": 0.0009750094974979862,
+      "iterations": 1700
+    },
+    {
+      "game": 3,
+      "shape": [
+        2,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.15463475932518156,
+      "estimated_value": 0.1551176109443737,
+      "absolute_value_error": 0.00048285161919214836,
+      "nash_gap": 0.0009750094974979862,
+      "iterations": 1700
+    },
+    {
+      "game": 4,
+      "shape": [
+        4,
+        7
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.304959271477028,
+      "estimated_value": 0.305599962405814,
+      "absolute_value_error": 0.0006406909287859919,
+      "nash_gap": 0.0028237500623307654,
+      "iterations": 250000
+    },
+    {
+      "game": 4,
+      "shape": [
+        4,
+        7
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.304959271477028,
+      "estimated_value": 0.3056365384903116,
+      "absolute_value_error": 0.0006772670132835779,
+      "nash_gap": 0.0009953043616867663,
+      "iterations": 57900
+    },
+    {
+      "game": 5,
+      "shape": [
+        7,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.8580201425924839,
+      "estimated_value": 0.8580140302014245,
+      "absolute_value_error": 6.112391059409639e-06,
+      "nash_gap": 0.0027769808850450772,
+      "iterations": 250000
+    },
+    {
+      "game": 5,
+      "shape": [
+        7,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.8580201425924839,
+      "estimated_value": 0.8573662569038144,
+      "absolute_value_error": 0.000653885688669531,
+      "nash_gap": 0.0016519834101480502,
+      "iterations": 250000
+    },
+    {
+      "game": 6,
+      "shape": [
+        4,
+        8
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.4502646094536603,
+      "estimated_value": 0.45026646530271935,
+      "absolute_value_error": 1.8558490590403487e-06,
+      "nash_gap": 0.0030445833498853325,
+      "iterations": 250000
+    },
+    {
+      "game": 6,
+      "shape": [
+        4,
+        8
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.4502646094536603,
+      "estimated_value": 0.45027574513964685,
+      "absolute_value_error": 1.11356859865408e-05,
+      "nash_gap": 0.0010372812089821104,
+      "iterations": 250000
+    },
+    {
+      "game": 7,
+      "shape": [
+        5,
+        7
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.047228206667621286,
+      "estimated_value": -0.04724491396530182,
+      "absolute_value_error": 1.6707297680530753e-05,
+      "nash_gap": 0.0009504879375903733,
+      "iterations": 1800
+    },
+    {
+      "game": 7,
+      "shape": [
+        5,
+        7
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.047228206667621286,
+      "estimated_value": -0.04724491396530182,
+      "absolute_value_error": 1.6707297680530753e-05,
+      "nash_gap": 0.0009504879375903733,
+      "iterations": 1800
+    },
+    {
+      "game": 8,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.38466719924367343,
+      "estimated_value": 0.3846694941885292,
+      "absolute_value_error": 2.2949448557629815e-06,
+      "nash_gap": 0.0025958013519616907,
+      "iterations": 250000
+    },
+    {
+      "game": 8,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.38466719924367343,
+      "estimated_value": 0.38453451720735876,
+      "absolute_value_error": 0.00013268203631466857,
+      "nash_gap": 0.0009987768842909528,
+      "iterations": 117900
+    },
+    {
+      "game": 9,
+      "shape": [
+        2,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.6736165193574286,
+      "estimated_value": -0.6731650557453892,
+      "absolute_value_error": 0.00045146361203940444,
+      "nash_gap": 0.0009762388071977712,
+      "iterations": 1400
+    },
+    {
+      "game": 9,
+      "shape": [
+        2,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.6736165193574286,
+      "estimated_value": -0.6731525410882068,
+      "absolute_value_error": 0.00046397826922184304,
+      "nash_gap": 0.0009637103859125862,
+      "iterations": 1400
+    },
+    {
+      "game": 10,
+      "shape": [
+        6,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.3801235832806833,
+      "estimated_value": 1.3801191359787484,
+      "absolute_value_error": 4.447301934940029e-06,
+      "nash_gap": 0.0009952211671138134,
+      "iterations": 158100
+    },
+    {
+      "game": 10,
+      "shape": [
+        6,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.3801235832806833,
+      "estimated_value": 1.3806525969881172,
+      "absolute_value_error": 0.0005290137074338563,
+      "nash_gap": 0.0009976989966948846,
+      "iterations": 41400
+    },
+    {
+      "game": 11,
+      "shape": [
+        6,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.2598811295549328,
+      "estimated_value": 0.2598829092365812,
+      "absolute_value_error": 1.779681648383935e-06,
+      "nash_gap": 0.0020815569218506913,
+      "iterations": 250000
+    },
+    {
+      "game": 11,
+      "shape": [
+        6,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.2598811295549328,
+      "estimated_value": 0.2595304636732996,
+      "absolute_value_error": 0.00035066588163318313,
+      "nash_gap": 0.0009920472685890358,
+      "iterations": 48100
+    },
+    {
+      "game": 12,
+      "shape": [
+        4,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6843120080534042,
+      "estimated_value": 0.6843142917606378,
+      "absolute_value_error": 2.2837072336523434e-06,
+      "nash_gap": 0.002094681852044311,
+      "iterations": 250000
+    },
+    {
+      "game": 12,
+      "shape": [
+        4,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6843120080534042,
+      "estimated_value": 0.684310542256267,
+      "absolute_value_error": 1.4657971372233902e-06,
+      "nash_gap": 0.0009977554415232515,
+      "iterations": 100600
+    },
+    {
+      "game": 13,
+      "shape": [
+        8,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.9647742755511138,
+      "estimated_value": 0.964781574857858,
+      "absolute_value_error": 7.29930674414625e-06,
+      "nash_gap": 0.0009928454108436569,
+      "iterations": 39300
+    },
+    {
+      "game": 13,
+      "shape": [
+        8,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.9647742755511138,
+      "estimated_value": 0.9647420850325286,
+      "absolute_value_error": 3.219051858527333e-05,
+      "nash_gap": 0.0009937842091892746,
+      "iterations": 11300
+    },
+    {
+      "game": 14,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.38176071142952983,
+      "estimated_value": -0.3807888691334367,
+      "absolute_value_error": 0.0009718422960931505,
+      "nash_gap": 0.0009718422960931505,
+      "iterations": 1300
+    },
+    {
+      "game": 14,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.38176071142952983,
+      "estimated_value": -0.3807888691334367,
+      "absolute_value_error": 0.0009718422960931505,
+      "nash_gap": 0.0009718422960931505,
+      "iterations": 1300
+    },
+    {
+      "game": 15,
+      "shape": [
+        7,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.46374362188980206,
+      "estimated_value": 0.46374304115243303,
+      "absolute_value_error": 5.807373690269735e-07,
+      "nash_gap": 0.0029778679245828776,
+      "iterations": 250000
+    },
+    {
+      "game": 15,
+      "shape": [
+        7,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.46374362188980206,
+      "estimated_value": 0.46431955499574923,
+      "absolute_value_error": 0.0005759331059471684,
+      "nash_gap": 0.0009929647051595825,
+      "iterations": 168600
+    },
+    {
+      "game": 16,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.7552615545660277,
+      "estimated_value": 1.7542852880851294,
+      "absolute_value_error": 0.0009762664808983246,
+      "nash_gap": 0.0009762664808981025,
+      "iterations": 1300
+    },
+    {
+      "game": 16,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.7552615545660277,
+      "estimated_value": 1.7542852880851294,
+      "absolute_value_error": 0.0009762664808983246,
+      "nash_gap": 0.0009762664808981025,
+      "iterations": 1300
+    },
+    {
+      "game": 17,
+      "shape": [
+        6,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.532249620492616,
+      "estimated_value": 0.5322513241529938,
+      "absolute_value_error": 1.7036603777720316e-06,
+      "nash_gap": 0.0024838986648874073,
+      "iterations": 250000
+    },
+    {
+      "game": 17,
+      "shape": [
+        6,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.532249620492616,
+      "estimated_value": 0.5325239410326644,
+      "absolute_value_error": 0.00027432054004838946,
+      "nash_gap": 0.000996795510724402,
+      "iterations": 247700
+    },
+    {
+      "game": 18,
+      "shape": [
+        4,
+        8
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.321189470571317,
+      "estimated_value": 0.32117162170050156,
+      "absolute_value_error": 1.784887081546227e-05,
+      "nash_gap": 0.0022088670921620035,
+      "iterations": 250000
+    },
+    {
+      "game": 18,
+      "shape": [
+        4,
+        8
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.321189470571317,
+      "estimated_value": 0.32131886806287197,
+      "absolute_value_error": 0.00012939749155493896,
+      "nash_gap": 0.0009986087984556469,
+      "iterations": 58600
+    },
+    {
+      "game": 19,
+      "shape": [
+        6,
+        2
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.1210945661921465,
+      "estimated_value": 1.1210859403426554,
+      "absolute_value_error": 8.625849491128434e-06,
+      "nash_gap": 0.0012255977475112978,
+      "iterations": 250000
+    },
+    {
+      "game": 19,
+      "shape": [
+        6,
+        2
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.1210945661921465,
+      "estimated_value": 1.1201598104533765,
+      "absolute_value_error": 0.000934755738769999,
+      "nash_gap": 0.000996349882746772,
+      "iterations": 54600
+    },
+    {
+      "game": 20,
+      "shape": [
+        5,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6200394796591956,
+      "estimated_value": 0.6200449553802485,
+      "absolute_value_error": 5.4757210529166045e-06,
+      "nash_gap": 0.003787979125056795,
+      "iterations": 250000
+    },
+    {
+      "game": 20,
+      "shape": [
+        5,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6200394796591956,
+      "estimated_value": 0.6206181434052944,
+      "absolute_value_error": 0.0005786637460988286,
+      "nash_gap": 0.000989439417819482,
+      "iterations": 74300
+    },
+    {
+      "game": 21,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.5024424335281963,
+      "estimated_value": 0.5024447247863967,
+      "absolute_value_error": 2.2912582003931092e-06,
+      "nash_gap": 0.003950704947230488,
+      "iterations": 250000
+    },
+    {
+      "game": 21,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.5024424335281963,
+      "estimated_value": 0.5024602547412551,
+      "absolute_value_error": 1.7821213058821783e-05,
+      "nash_gap": 0.0015174864240490304,
+      "iterations": 250000
+    },
+    {
+      "game": 22,
+      "shape": [
+        1,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.41359343073416555,
+      "estimated_value": 0.41359343073416555,
+      "absolute_value_error": 0.0,
+      "nash_gap": 0.0,
+      "iterations": 100
+    },
+    {
+      "game": 22,
+      "shape": [
+        1,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.41359343073416555,
+      "estimated_value": 0.41359343073416555,
+      "absolute_value_error": 0.0,
+      "nash_gap": 0.0,
+      "iterations": 100
+    },
+    {
+      "game": 23,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.573200780703322,
+      "estimated_value": -0.5722593511120861,
+      "absolute_value_error": 0.0009414295912358872,
+      "nash_gap": 0.0009414295912358872,
+      "iterations": 1300
+    },
+    {
+      "game": 23,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.573200780703322,
+      "estimated_value": -0.5722593511120861,
+      "absolute_value_error": 0.0009414295912358872,
+      "nash_gap": 0.0009414295912358872,
+      "iterations": 1300
+    },
+    {
+      "game": 24,
+      "shape": [
+        9,
+        7
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.8253151190808273,
+      "estimated_value": 0.8253077228186584,
+      "absolute_value_error": 7.396262168946066e-06,
+      "nash_gap": 0.0026794840779212903,
+      "iterations": 250000
+    },
+    {
+      "game": 24,
+      "shape": [
+        9,
+        7
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.8253151190808273,
+      "estimated_value": 0.8253167452306766,
+      "absolute_value_error": 1.626149849220937e-06,
+      "nash_gap": 0.0009964313316896956,
+      "iterations": 202700
+    },
+    {
+      "game": 25,
+      "shape": [
+        3,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.13476080253697,
+      "estimated_value": -0.13474258320115912,
+      "absolute_value_error": 1.8219335810892856e-05,
+      "nash_gap": 0.0009920260607732823,
+      "iterations": 160700
+    },
+    {
+      "game": 25,
+      "shape": [
+        3,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.13476080253697,
+      "estimated_value": -0.134678754285673,
+      "absolute_value_error": 8.204825129701221e-05,
+      "nash_gap": 0.0009933787254305382,
+      "iterations": 32500
+    },
+    {
+      "game": 26,
+      "shape": [
+        6,
+        2
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.4761610438126653,
+      "estimated_value": 1.475325331735645,
+      "absolute_value_error": 0.0008357120770203785,
+      "nash_gap": 0.0009570530052547266,
+      "iterations": 2100
+    },
+    {
+      "game": 26,
+      "shape": [
+        6,
+        2
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.4761610438126653,
+      "estimated_value": 1.475325331735645,
+      "absolute_value_error": 0.0008357120770203785,
+      "nash_gap": 0.0009570530052547266,
+      "iterations": 2100
+    },
+    {
+      "game": 27,
+      "shape": [
+        9,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.3244499476844696,
+      "estimated_value": 1.3244468858995404,
+      "absolute_value_error": 3.0617849291481036e-06,
+      "nash_gap": 0.0009995305946692845,
+      "iterations": 169600
+    },
+    {
+      "game": 27,
+      "shape": [
+        9,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.3244499476844696,
+      "estimated_value": 1.3253300585941536,
+      "absolute_value_error": 0.0008801109096840953,
+      "nash_gap": 0.0009598340017293872,
+      "iterations": 32500
+    },
+    {
+      "game": 28,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.027357815884846093,
+      "estimated_value": 0.028348506934574788,
+      "absolute_value_error": 0.0009906910497286953,
+      "nash_gap": 0.0009906910497286953,
+      "iterations": 1400
+    },
+    {
+      "game": 28,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.027357815884846093,
+      "estimated_value": 0.028348506934574788,
+      "absolute_value_error": 0.0009906910497286953,
+      "nash_gap": 0.0009906910497286953,
+      "iterations": 1400
+    },
+    {
+      "game": 29,
+      "shape": [
+        5,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.2717936426626713,
+      "estimated_value": 1.2717855972710166,
+      "absolute_value_error": 8.045391654665224e-06,
+      "nash_gap": 0.0009871395181151321,
+      "iterations": 207800
+    },
+    {
+      "game": 29,
+      "shape": [
+        5,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.2717936426626713,
+      "estimated_value": 1.2709110715325167,
+      "absolute_value_error": 0.0008825711301545525,
+      "nash_gap": 0.0009927562336813356,
+      "iterations": 53400
+    },
+    {
+      "game": 30,
+      "shape": [
+        6,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6890078674415311,
+      "estimated_value": 0.6890147604276385,
+      "absolute_value_error": 6.8929861074540355e-06,
+      "nash_gap": 0.0029892008624413657,
+      "iterations": 250000
+    },
+    {
+      "game": 30,
+      "shape": [
+        6,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6890078674415311,
+      "estimated_value": 0.6883362428295334,
+      "absolute_value_error": 0.0006716246119976566,
+      "nash_gap": 0.0009989618363203112,
+      "iterations": 50100
+    },
+    {
+      "game": 31,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.9883198325656894,
+      "estimated_value": 1.9873808041563332,
+      "absolute_value_error": 0.000939028409356224,
+      "nash_gap": 0.000939028409356446,
+      "iterations": 1100
+    },
+    {
+      "game": 31,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.9883198325656894,
+      "estimated_value": 1.9873808041563332,
+      "absolute_value_error": 0.000939028409356224,
+      "nash_gap": 0.000939028409356446,
+      "iterations": 1100
+    },
+    {
+      "game": 32,
+      "shape": [
+        9,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.49003651203784415,
+      "estimated_value": 0.49003668083492835,
+      "absolute_value_error": 1.6879708419903494e-07,
+      "nash_gap": 0.0022996555436849975,
+      "iterations": 250000
+    },
+    {
+      "game": 32,
+      "shape": [
+        9,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.49003651203784415,
+      "estimated_value": 0.4900288873565607,
+      "absolute_value_error": 7.624681283457946e-06,
+      "nash_gap": 0.0009999459032501434,
+      "iterations": 141600
+    },
+    {
+      "game": 33,
+      "shape": [
+        1,
+        2
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.7001444936612874,
+      "estimated_value": -0.6992626405198398,
+      "absolute_value_error": 0.0008818531414476194,
+      "nash_gap": 0.0008818531414476194,
+      "iterations": 500
+    },
+    {
+      "game": 33,
+      "shape": [
+        1,
+        2
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.7001444936612874,
+      "estimated_value": -0.6992626405198398,
+      "absolute_value_error": 0.0008818531414476194,
+      "nash_gap": 0.0008818531414476194,
+      "iterations": 500
+    },
+    {
+      "game": 34,
+      "shape": [
+        4,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.602322459743932,
+      "estimated_value": 0.602323865034601,
+      "absolute_value_error": 1.40529066905426e-06,
+      "nash_gap": 0.001393012830418594,
+      "iterations": 250000
+    },
+    {
+      "game": 34,
+      "shape": [
+        4,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.602322459743932,
+      "estimated_value": 0.6023283320779094,
+      "absolute_value_error": 5.872333977419153e-06,
+      "nash_gap": 0.0009953220252837403,
+      "iterations": 112400
+    },
+    {
+      "game": 35,
+      "shape": [
+        5,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.5427706641674658,
+      "estimated_value": 0.5427706382278471,
+      "absolute_value_error": 2.5939618675252518e-08,
+      "nash_gap": 0.0009731064863126582,
+      "iterations": 75100
+    },
+    {
+      "game": 35,
+      "shape": [
+        5,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.5427706641674658,
+      "estimated_value": 0.54271814073806,
+      "absolute_value_error": 5.2523429405759714e-05,
+      "nash_gap": 0.0009953338532096012,
+      "iterations": 21800
+    },
+    {
+      "game": 36,
+      "shape": [
+        8,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.09194999028177854,
+      "estimated_value": 0.09194989723717026,
+      "absolute_value_error": 9.304460828196692e-08,
+      "nash_gap": 0.003873982832794748,
+      "iterations": 250000
+    },
+    {
+      "game": 36,
+      "shape": [
+        8,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.09194999028177854,
+      "estimated_value": 0.09207931899132275,
+      "absolute_value_error": 0.00012932870954421305,
+      "nash_gap": 0.0009816323672245109,
+      "iterations": 40300
+    },
+    {
+      "game": 37,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.5697818755049103,
+      "estimated_value": 0.5697561189093584,
+      "absolute_value_error": 2.5756595551928996e-05,
+      "nash_gap": 0.002463471631484637,
+      "iterations": 250000
+    },
+    {
+      "game": 37,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.5697818755049103,
+      "estimated_value": 0.5696824366301438,
+      "absolute_value_error": 9.943887476648872e-05,
+      "nash_gap": 0.0009918877276211546,
+      "iterations": 82000
+    },
+    {
+      "game": 38,
+      "shape": [
+        9,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.7592310833428955,
+      "estimated_value": 0.7591882508580131,
+      "absolute_value_error": 4.283248488234914e-05,
+      "nash_gap": 0.003608601069479689,
+      "iterations": 250000
+    },
+    {
+      "game": 38,
+      "shape": [
+        9,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.7592310833428955,
+      "estimated_value": 0.7592013704607194,
+      "absolute_value_error": 2.9712882176013977e-05,
+      "nash_gap": 0.0009994193627490544,
+      "iterations": 133000
+    },
+    {
+      "game": 39,
+      "shape": [
+        5,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.9222929554857495,
+      "estimated_value": 0.922289756783077,
+      "absolute_value_error": 3.1987026725133205e-06,
+      "nash_gap": 0.001542155689783553,
+      "iterations": 250000
+    },
+    {
+      "game": 39,
+      "shape": [
+        5,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.9222929554857495,
+      "estimated_value": 0.9222846633985113,
+      "absolute_value_error": 8.292087238181978e-06,
+      "nash_gap": 0.0009997568702595494,
+      "iterations": 110200
+    },
+    {
+      "game": 40,
+      "shape": [
+        8,
+        8
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6021045884181442,
+      "estimated_value": 0.6021050376022017,
+      "absolute_value_error": 4.491840575049366e-07,
+      "nash_gap": 0.002516060082873972,
+      "iterations": 250000
+    },
+    {
+      "game": 40,
+      "shape": [
+        8,
+        8
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6021045884181442,
+      "estimated_value": 0.6023919460783403,
+      "absolute_value_error": 0.0002873576601961636,
+      "nash_gap": 0.0009953520807930438,
+      "iterations": 182400
+    },
+    {
+      "game": 41,
+      "shape": [
+        1,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.5472378893864293,
+      "estimated_value": -0.546249965075325,
+      "absolute_value_error": 0.0009879243111042824,
+      "nash_gap": 0.0009879243111042824,
+      "iterations": 1600
+    },
+    {
+      "game": 41,
+      "shape": [
+        1,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.5472378893864293,
+      "estimated_value": -0.546249965075325,
+      "absolute_value_error": 0.0009879243111042824,
+      "nash_gap": 0.0009879243111042824,
+      "iterations": 1600
+    },
+    {
+      "game": 42,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.9097279369957157,
+      "estimated_value": -0.908765562942149,
+      "absolute_value_error": 0.0009623740535666947,
+      "nash_gap": 0.0009623740535665837,
+      "iterations": 2500
+    },
+    {
+      "game": 42,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.9097279369957157,
+      "estimated_value": -0.908765562942149,
+      "absolute_value_error": 0.0009623740535666947,
+      "nash_gap": 0.0009623740535665837,
+      "iterations": 2500
+    },
+    {
+      "game": 43,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.8997845630374885,
+      "estimated_value": 1.8987911825990353,
+      "absolute_value_error": 0.0009933804384532063,
+      "nash_gap": 0.0009933804384529843,
+      "iterations": 1600
+    },
+    {
+      "game": 43,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.8997845630374885,
+      "estimated_value": 1.8987911825990353,
+      "absolute_value_error": 0.0009933804384532063,
+      "nash_gap": 0.0009933804384529843,
+      "iterations": 1600
+    },
+    {
+      "game": 44,
+      "shape": [
+        4,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.38275534947513246,
+      "estimated_value": 0.38275614389002244,
+      "absolute_value_error": 7.94414889981887e-07,
+      "nash_gap": 0.0022673702056578704,
+      "iterations": 250000
+    },
+    {
+      "game": 44,
+      "shape": [
+        4,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.38275534947513246,
+      "estimated_value": 0.38272414428039847,
+      "absolute_value_error": 3.120519473398531e-05,
+      "nash_gap": 0.000991819345929179,
+      "iterations": 28400
+    },
+    {
+      "game": 45,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.9078116597605281,
+      "estimated_value": 1.906839300598357,
+      "absolute_value_error": 0.0009723591621710881,
+      "nash_gap": 0.000972359162170866,
+      "iterations": 2700
+    },
+    {
+      "game": 45,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.9078116597605281,
+      "estimated_value": 1.906839300598357,
+      "absolute_value_error": 0.0009723591621710881,
+      "nash_gap": 0.000972359162170866,
+      "iterations": 2700
+    },
+    {
+      "game": 46,
+      "shape": [
+        5,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6693336214231589,
+      "estimated_value": 0.6684553744143001,
+      "absolute_value_error": 0.0008782470088587457,
+      "nash_gap": 0.0008782470088587457,
+      "iterations": 700
+    },
+    {
+      "game": 46,
+      "shape": [
+        5,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6693336214231589,
+      "estimated_value": 0.6684553744143001,
+      "absolute_value_error": 0.0008782470088587457,
+      "nash_gap": 0.0008782470088587457,
+      "iterations": 700
+    },
+    {
+      "game": 47,
+      "shape": [
+        7,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.2254981068269553,
+      "estimated_value": 1.2255051780278436,
+      "absolute_value_error": 7.071200888386642e-06,
+      "nash_gap": 0.001151255901054471,
+      "iterations": 250000
+    },
+    {
+      "game": 47,
+      "shape": [
+        7,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.2254981068269553,
+      "estimated_value": 1.2260624643370088,
+      "absolute_value_error": 0.0005643575100535703,
+      "nash_gap": 0.0009945361894694305,
+      "iterations": 27500
+    },
+    {
+      "game": 48,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.6187377869076118,
+      "estimated_value": 1.6178277040197355,
+      "absolute_value_error": 0.0009100828878763068,
+      "nash_gap": 0.0009100828878763068,
+      "iterations": 1100
+    },
+    {
+      "game": 48,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.6187377869076118,
+      "estimated_value": 1.6178277040197355,
+      "absolute_value_error": 0.0009100828878763068,
+      "nash_gap": 0.0009100828878763068,
+      "iterations": 1100
+    },
+    {
+      "game": 49,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.17943152376199778,
+      "estimated_value": -0.17941914651853663,
+      "absolute_value_error": 1.2377243461147991e-05,
+      "nash_gap": 0.0009766086477472347,
+      "iterations": 44200
+    },
+    {
+      "game": 49,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.17943152376199778,
+      "estimated_value": -0.17958195525927584,
+      "absolute_value_error": 0.0001504314972780585,
+      "nash_gap": 0.0009973249071461299,
+      "iterations": 12100
+    },
+    {
+      "game": 50,
+      "shape": [
+        7,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.7446560959382952,
+      "estimated_value": 0.7446459174986676,
+      "absolute_value_error": 1.0178439627583913e-05,
+      "nash_gap": 0.0009895529199831499,
+      "iterations": 155400
+    },
+    {
+      "game": 50,
+      "shape": [
+        7,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.7446560959382952,
+      "estimated_value": 0.7446019231796454,
+      "absolute_value_error": 5.417275864982862e-05,
+      "nash_gap": 0.000999684146826274,
+      "iterations": 69700
+    },
+    {
+      "game": 51,
+      "shape": [
+        1,
+        2
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6326984583876889,
+      "estimated_value": 0.6335448038283558,
+      "absolute_value_error": 0.0008463454406668625,
+      "nash_gap": 0.0008463454406668625,
+      "iterations": 600
+    },
+    {
+      "game": 51,
+      "shape": [
+        1,
+        2
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6326984583876889,
+      "estimated_value": 0.6335448038283558,
+      "absolute_value_error": 0.0008463454406668625,
+      "nash_gap": 0.0008463454406668625,
+      "iterations": 600
+    },
+    {
+      "game": 52,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.4792372115464865,
+      "estimated_value": 1.478263407156849,
+      "absolute_value_error": 0.000973804389637456,
+      "nash_gap": 0.000973804389637456,
+      "iterations": 2300
+    },
+    {
+      "game": 52,
+      "shape": [
+        9,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.4792372115464865,
+      "estimated_value": 1.478263407156849,
+      "absolute_value_error": 0.000973804389637456,
+      "nash_gap": 0.000973804389637456,
+      "iterations": 2300
+    },
+    {
+      "game": 53,
+      "shape": [
+        6,
+        8
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.47712921941883474,
+      "estimated_value": 0.47712801127236465,
+      "absolute_value_error": 1.2081464700886002e-06,
+      "nash_gap": 0.002801911575888494,
+      "iterations": 250000
+    },
+    {
+      "game": 53,
+      "shape": [
+        6,
+        8
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.47712921941883474,
+      "estimated_value": 0.47714573654945436,
+      "absolute_value_error": 1.6517130619619902e-05,
+      "nash_gap": 0.0012317954356160787,
+      "iterations": 250000
+    },
+    {
+      "game": 54,
+      "shape": [
+        3,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6160113965961165,
+      "estimated_value": 0.6159123733392338,
+      "absolute_value_error": 9.902325688271318e-05,
+      "nash_gap": 0.0009817109489749232,
+      "iterations": 1400
+    },
+    {
+      "game": 54,
+      "shape": [
+        3,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6160113965961165,
+      "estimated_value": 0.6159123733392338,
+      "absolute_value_error": 9.902325688271318e-05,
+      "nash_gap": 0.0009817109489749232,
+      "iterations": 1400
+    },
+    {
+      "game": 55,
+      "shape": [
+        8,
+        5
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.6719717942124458,
+      "estimated_value": 0.6717549354676455,
+      "absolute_value_error": 0.00021685874480026346,
+      "nash_gap": 0.002388312653094471,
+      "iterations": 250000
+    },
+    {
+      "game": 55,
+      "shape": [
+        8,
+        5
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.6719717942124458,
+      "estimated_value": 0.6717602846606108,
+      "absolute_value_error": 0.00021150955183502074,
+      "nash_gap": 0.0009986401383647037,
+      "iterations": 202600
+    },
+    {
+      "game": 56,
+      "shape": [
+        5,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.9203159257869276,
+      "estimated_value": 0.9203211052325448,
+      "absolute_value_error": 5.179445617287115e-06,
+      "nash_gap": 0.0017882440203742522,
+      "iterations": 250000
+    },
+    {
+      "game": 56,
+      "shape": [
+        5,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.9203159257869276,
+      "estimated_value": 0.9207418336018218,
+      "absolute_value_error": 0.0004259078148942663,
+      "nash_gap": 0.0009939935815157508,
+      "iterations": 38100
+    },
+    {
+      "game": 57,
+      "shape": [
+        1,
+        3
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.7502168294191015,
+      "estimated_value": -0.7493236260740337,
+      "absolute_value_error": 0.0008932033450678167,
+      "nash_gap": 0.0008932033450678167,
+      "iterations": 900
+    },
+    {
+      "game": 57,
+      "shape": [
+        1,
+        3
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.7502168294191015,
+      "estimated_value": -0.7493236260740337,
+      "absolute_value_error": 0.0008932033450678167,
+      "nash_gap": 0.0008932033450678167,
+      "iterations": 900
+    },
+    {
+      "game": 58,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.9437599177417834,
+      "estimated_value": -0.9427987522279944,
+      "absolute_value_error": 0.0009611655137889974,
+      "nash_gap": 0.0009611655137889974,
+      "iterations": 2200
+    },
+    {
+      "game": 58,
+      "shape": [
+        1,
+        9
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.9437599177417834,
+      "estimated_value": -0.9427987522279944,
+      "absolute_value_error": 0.0009611655137889974,
+      "nash_gap": 0.0009611655137889974,
+      "iterations": 2200
+    },
+    {
+      "game": 59,
+      "shape": [
+        1,
+        8
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.2932931812764401,
+      "estimated_value": -0.2923435285307652,
+      "absolute_value_error": 0.0009496527456749337,
+      "nash_gap": 0.0009496527456749337,
+      "iterations": 1600
+    },
+    {
+      "game": 59,
+      "shape": [
+        1,
+        8
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.2932931812764401,
+      "estimated_value": -0.2923435285307652,
+      "absolute_value_error": 0.0009496527456749337,
+      "nash_gap": 0.0009496527456749337,
+      "iterations": 1600
+    },
+    {
+      "game": 60,
+      "shape": [
+        2,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.31292905671481946,
+      "estimated_value": -0.3129203043972048,
+      "absolute_value_error": 8.752317614657557e-06,
+      "nash_gap": 0.0009985249109046301,
+      "iterations": 107800
+    },
+    {
+      "game": 60,
+      "shape": [
+        2,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.31292905671481946,
+      "estimated_value": -0.3121494750694555,
+      "absolute_value_error": 0.0007795816453639581,
+      "nash_gap": 0.0009936841361823934,
+      "iterations": 10800
+    },
+    {
+      "game": 61,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 0.21152870995461187,
+      "estimated_value": 0.21150653722563165,
+      "absolute_value_error": 2.2172728980224266e-05,
+      "nash_gap": 0.0022446258415894926,
+      "iterations": 250000
+    },
+    {
+      "game": 61,
+      "shape": [
+        4,
+        6
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 0.21152870995461187,
+      "estimated_value": 0.21150924014504396,
+      "absolute_value_error": 1.9469809567906893e-05,
+      "nash_gap": 0.000997754610782442,
+      "iterations": 167200
+    },
+    {
+      "game": 62,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": 1.106343718737263,
+      "estimated_value": 1.1054072359330853,
+      "absolute_value_error": 0.0009364828041775741,
+      "nash_gap": 0.0009364828041775741,
+      "iterations": 1000
+    },
+    {
+      "game": 62,
+      "shape": [
+        3,
+        1
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": 1.106343718737263,
+      "estimated_value": 1.1054072359330853,
+      "absolute_value_error": 0.0009364828041775741,
+      "nash_gap": 0.0009364828041775741,
+      "iterations": 1000
+    },
+    {
+      "game": 63,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching",
+      "lp_value": -0.20608590151226291,
+      "estimated_value": -0.20649304710669145,
+      "absolute_value_error": 0.0004071455944285318,
+      "nash_gap": 0.0009699641099240319,
+      "iterations": 1800
+    },
+    {
+      "game": 63,
+      "shape": [
+        5,
+        4
+      ],
+      "algorithm": "regret-matching-plus",
+      "lp_value": -0.20608590151226291,
+      "estimated_value": -0.20651900025920694,
+      "absolute_value_error": 0.0004330987469440273,
+      "nash_gap": 0.0009992408792053875,
+      "iterations": 1800
+    }
+  ]
+}

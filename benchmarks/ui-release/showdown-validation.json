@@ -1,0 +1,50 @@
+{
+  "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+  "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+  "games": 6,
+  "compared_states": 92,
+  "records": [
+    {
+      "fixture": 0,
+      "seed": 0,
+      "turns": 7,
+      "states": 15,
+      "ended": true
+    },
+    {
+      "fixture": 0,
+      "seed": 1,
+      "turns": 6,
+      "states": 13,
+      "ended": true
+    },
+    {
+      "fixture": 1,
+      "seed": 0,
+      "turns": 6,
+      "states": 13,
+      "ended": true
+    },
+    {
+      "fixture": 1,
+      "seed": 1,
+      "turns": 7,
+      "states": 15,
+      "ended": true
+    },
+    {
+      "fixture": 2,
+      "seed": 0,
+      "turns": 10,
+      "states": 21,
+      "ended": true
+    },
+    {
+      "fixture": 2,
+      "seed": 1,
+      "turns": 7,
+      "states": 15,
+      "ended": true
+    }
+  ]
+}

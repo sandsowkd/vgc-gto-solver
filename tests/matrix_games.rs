@@ -1,4 +1,4 @@
-use nashdex::solver::{self, Algorithm, SolverConfig};
+use vgc_gto_solver::solver::{self, Algorithm, SolverConfig};
 
 fn check(a: &[Vec<f64>], value: f64, x: Option<&[f64]>, y: Option<&[f64]>) {
     for algorithm in [Algorithm::RegretMatching, Algorithm::RegretMatchingPlus] {

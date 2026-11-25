@@ -1,10 +1,11 @@
 [package]
-name = "nashdex"
+name = "vgc-gto-solver"
 version = "0.1.0"
 edition = "2024"
 description = "Research solver for simultaneous-move Pokémon Champions endgames"
-repository = "https://github.com/sandsowkd/vgc-solver"
+repository = "https://github.com/sandsowkd/vgc-gto-solver"
 publish = false
+default-run = "vgc-gto-solver"
 
 [dependencies]
 ninjask = { git = "https://github.com/dcabatin/Ninjask", rev = "8a59175f3915771285cd16fce5d7f788610ff242" }
@@ -12,6 +13,11 @@ serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1", features = ["preserve_order"] }
 rayon = "1.11"
 clap = { version = "4.5", features = ["derive"] }
+
+axum = "0.8"
+tokio = { version = "1", features = ["macros", "rt-multi-thread", "net", "signal", "sync", "time"] }
+tower-http = { version = "0.6", features = ["fs", "limit", "trace"] }
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "json", "stream"] }
 
 [profile.release]
 lto = "thin"

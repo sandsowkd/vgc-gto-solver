@@ -1,16 +1,16 @@
 use clap::{Parser, Subcommand};
-use nashdex::{
+use serde_json::{Value, json};
+use std::path::{Path, PathBuf};
+use vgc_gto_solver::{
     battle::Position,
     policy::PolicyKind,
     search::SearchConfig,
     solver::{self, SolverConfig},
 };
-use serde_json::{Value, json};
-use std::path::{Path, PathBuf};
 
 #[derive(Parser)]
 #[command(
-    name = "nashdex",
+    name = "vgc-gto-solver",
     version,
     about = "Pokémon Champions root matrix research solver"
 )]
@@ -70,9 +70,9 @@ enum Command {
     Match {
         input: PathBuf,
         #[arg(long, value_enum)]
-        a: nashdex::benchmark::Agent,
+        a: vgc_gto_solver::benchmark::Agent,
         #[arg(long, value_enum)]
-        b: nashdex::benchmark::Agent,
+        b: vgc_gto_solver::benchmark::Agent,
         #[arg(long, default_value_t = 100)]
         pairs: u64,
         #[arg(long, default_value_t = 1)]
@@ -81,18 +81,18 @@ enum Command {
         solver_samples: u64,
     },
 }
-fn read<T: serde::de::DeserializeOwned>(p: &Path) -> nashdex::Result<T> {
+fn read<T: serde::de::DeserializeOwned>(p: &Path) -> vgc_gto_solver::Result<T> {
     let text = std::fs::read_to_string(p).map_err(|e| format!("{}: {e}", p.display()))?;
     serde_json::from_str(&text).map_err(|e| format!("{}: {e}", p.display()))
 }
-fn output(v: &impl serde::Serialize) -> nashdex::Result<()> {
+fn output(v: &impl serde::Serialize) -> vgc_gto_solver::Result<()> {
     println!(
         "{}",
         serde_json::to_string_pretty(v).map_err(|e| e.to_string())?
     );
     Ok(())
 }
-fn run() -> nashdex::Result<()> {
+fn run() -> vgc_gto_solver::Result<()> {
     match Cli::parse().command {
         Command::Solve {
             input,
@@ -133,12 +133,12 @@ fn run() -> nashdex::Result<()> {
             if let Some(x) = iterations {
                 c.solver.iterations = x;
             }
-            let r = nashdex::search::solve(&p, &c)?;
+            let r = vgc_gto_solver::search::solve(&p, &c)?;
             if json {
                 output(&r)?;
             } else {
                 println!(
-                    "NashDex — {} × {} legal joint actions; {} samples; {:.1} ms",
+                    "vgc-gto-solver — {} × {} legal joint actions; {} samples; {:.1} ms",
                     r.matrix.rows, r.matrix.columns, r.matrix.samples, r.runtime.total_ms
                 );
                 if let Some(s) = &r.solution {
@@ -203,7 +203,7 @@ fn run() -> nashdex::Result<()> {
         Command::Inspect { input } => {
             let b = read::<Position>(&input)?.build()?;
             output(
-                &json!({"actions":[nashdex::actions::describe(&b,0,&nashdex::actions::legal(&b,0)),nashdex::actions::describe(&b,1,&nashdex::actions::legal(&b,1))],"projection":b.projection()}),
+                &json!({"actions":[vgc_gto_solver::actions::describe(&b,0,&vgc_gto_solver::actions::legal(&b,0)),vgc_gto_solver::actions::describe(&b,1,&vgc_gto_solver::actions::legal(&b,1))],"projection":b.projection()}),
             )
         }
         Command::Trace { input } => {
@@ -229,7 +229,7 @@ fn run() -> nashdex::Result<()> {
             iterations,
             games,
             policy,
-        } => output(&nashdex::benchmark::micro(
+        } => output(&vgc_gto_solver::benchmark::micro(
             &read(&input)?,
             iterations,
             games,
@@ -242,7 +242,7 @@ fn run() -> nashdex::Result<()> {
             pairs,
             seed,
             solver_samples,
-        } => output(&nashdex::benchmark::matches(
+        } => output(&vgc_gto_solver::benchmark::matches(
             &read(&input)?,
             a,
             b,
@@ -254,7 +254,7 @@ fn run() -> nashdex::Result<()> {
 }
 fn main() {
     if let Err(e) = run() {
-        eprintln!("nashdex: {e}");
+        eprintln!("vgc-gto-solver: {e}");
         std::process::exit(1);
     }
 }

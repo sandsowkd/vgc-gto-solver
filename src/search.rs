@@ -49,17 +49,30 @@ fn ms(t: Duration) -> f64 {
 
 pub fn solve(position: &Position, config: &SearchConfig) -> crate::Result<SearchResult> {
     let start = Instant::now();
+    let root = position.build()?;
+    solve_battle(&root, config, start, None)
+}
+
+pub fn solve_battle(
+    root: &ninjask::Battle,
+    config: &SearchConfig,
+    start: Instant,
+    control: Option<&crate::control::Control>,
+) -> crate::Result<SearchResult> {
+    if let Some(c) = control {
+        c.check()?;
+    }
+    crate::battle::validate_boundary(root)?;
     config.solver.validate()?;
     if config.budget_ms == Some(0) {
         return Err("budget_ms must be positive".into());
     }
-    let root = position.build()?;
     let init = start.elapsed();
     let t = Instant::now();
-    let choices = [actions::legal(&root, 0), actions::legal(&root, 1)];
+    let choices = [actions::legal(root, 0), actions::legal(root, 1)];
     let descriptions = [
-        actions::describe(&root, 0, &choices[0]),
-        actions::describe(&root, 1, &choices[1]),
+        actions::describe(root, 0, &choices[0]),
+        actions::describe(root, 1, &choices[1]),
     ];
     let enumeration = t.elapsed();
     let deadline = config
@@ -69,13 +82,18 @@ pub fn solve(position: &Position, config: &SearchConfig) -> crate::Result<Search
         .budget_ms
         .and_then(|b| start.checked_add(Duration::from_secs_f64(b as f64 * 0.0009)));
     let t = Instant::now();
-    let estimate = matrix::estimate(&root, &choices, &config.sampling, sampling_deadline)?;
+    let estimate =
+        matrix::estimate_controlled(root, &choices, &config.sampling, sampling_deadline, control)?;
     let sampling = t.elapsed();
     let t = Instant::now();
+    if let Some(c) = control {
+        c.check()?;
+        c.phase.store(2, std::sync::atomic::Ordering::Relaxed);
+    }
     let solution = estimate
         .payoff
         .as_ref()
-        .map(|a| solver::solve_until(a, &config.solver, deadline))
+        .map(|a| solver::solve_controlled(a, &config.solver, deadline, control))
         .transpose()?;
     let solving = t.elapsed();
     let mut interval = None;

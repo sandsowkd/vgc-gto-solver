@@ -99,6 +99,17 @@ pub fn estimate(
     config: &SamplingConfig,
     deadline: Option<Instant>,
 ) -> crate::Result<Estimate> {
+    estimate_controlled(root, actions, config, deadline, None)
+}
+
+pub fn estimate_controlled(
+    root: &Battle,
+    actions: &[Vec<JointAction>; 2],
+    config: &SamplingConfig,
+    deadline: Option<Instant>,
+    control: Option<&crate::control::Control>,
+) -> crate::Result<Estimate> {
+    use std::sync::atomic::Ordering;
     if config.samples_per_cell == 0
         || config.max_turns == 0
         || config.confidence <= 0.0
@@ -114,6 +125,10 @@ pub fn estimate(
     if m == 0 || n == 0 {
         return Err("both sides need legal actions".into());
     }
+    if let Some(c) = control {
+        c.total.store((m * n) as u64, Ordering::Relaxed);
+        c.phase.store(1, Ordering::Relaxed);
+    }
     let pool = rayon::ThreadPoolBuilder::new()
         .num_threads(config.threads)
         .build()
@@ -121,6 +136,9 @@ pub fn estimate(
     let mut cells = vec![Cell::default(); m * n];
     // One complete sweep before refinement: no action is pruned to meet a budget.
     for round in 0..config.samples_per_cell {
+        if let Some(c) = control {
+            c.check()?;
+        }
         if deadline.is_some_and(|d| Instant::now() >= d) {
             break;
         }
@@ -129,23 +147,33 @@ pub fn estimate(
                 .par_iter_mut()
                 .enumerate()
                 .map(|(index, cell)| {
+                    if let Some(c) = control {
+                        c.check()?;
+                    }
                     if deadline.is_some_and(|d| Instant::now() >= d) {
                         return Ok(());
                     }
                     let first = [actions[0][index / n].clone(), actions[1][index % n].clone()];
-                    let result = rollout::play(
+                    let result = rollout::play_controlled(
                         root,
                         Some(first),
                         config.policies,
                         rollout::sample_seed(config.seed, index, round),
                         config.max_turns,
                         None,
+                        control,
                     )?;
                     cell.simulated_turns += u64::from(result.turns);
                     cell.simulated_decisions += u64::from(result.decisions);
                     if result.cancelled_for_budget {
                         cell.cancelled_for_budget += 1;
                         return Ok(());
+                    }
+                    if let Some(c) = control {
+                        c.samples.fetch_add(1, Ordering::Relaxed);
+                        if cell.samples == 0 {
+                            c.covered.fetch_add(1, Ordering::Relaxed);
+                        }
                     }
                     cell.samples += 1;
                     match result.utility {

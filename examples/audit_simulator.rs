@@ -2,8 +2,8 @@
 use ninjask::dex::{support, types::Support};
 use serde_json::json;
 fn main() {
-    let dex = nashdex::data::dex();
-    let data = nashdex::data::format_data();
+    let dex = vgc_gto_solver::data::dex();
+    let data = vgc_gto_solver::data::format_data();
     let mut reports = serde_json::Map::new();
     for kind in ["moves", "items", "abilities"] {
         let mut total = 0;
@@ -25,5 +25,5 @@ fn main() {
             json!({"total":total,"supported":total-unsupported.len(),"unsupported":unsupported}),
         );
     }
-    println!("{}",serde_json::to_string_pretty(&json!({"format":nashdex::data::FORMAT,"simulator_commit":nashdex::data::SIMULATOR_COMMIT,"support":reports})).unwrap());
+    println!("{}",serde_json::to_string_pretty(&json!({"format":vgc_gto_solver::data::FORMAT,"simulator_commit":vgc_gto_solver::data::SIMULATOR_COMMIT,"support":reports})).unwrap());
 }

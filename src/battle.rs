@@ -179,6 +179,13 @@ fn set(p: &Pokemon) -> Result<MonSet> {
     })
 }
 
+/// Validate a complete UI/import set against pinned native legality.
+pub fn checked_set(p: &Pokemon) -> Result<MonSet> {
+    let mon = set(p)?;
+    validate_set(&mon)?;
+    Ok(mon)
+}
+
 impl Position {
     pub fn build(&self) -> Result<Battle> {
         let dex = data::dex();

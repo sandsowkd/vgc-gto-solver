@@ -10,7 +10,7 @@ from scipy.optimize import linprog
 import scipy
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--binary', default='target/release/nashdex')
+parser.add_argument('--binary', default='target/release/vgc-gto-solver')
 parser.add_argument('--games', type=int, default=64)
 parser.add_argument('--output', default='benchmarks/lp-validation.json')
 args = parser.parse_args()

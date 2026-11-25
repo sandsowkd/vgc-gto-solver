@@ -117,6 +117,16 @@ pub fn solve_until(
     config: &SolverConfig,
     deadline: Option<Instant>,
 ) -> crate::Result<Solution> {
+    solve_controlled(a, config, deadline, None)
+}
+
+pub fn solve_controlled(
+    a: &[Vec<f64>],
+    config: &SolverConfig,
+    deadline: Option<Instant>,
+    control: Option<&crate::control::Control>,
+) -> crate::Result<Solution> {
+    use std::sync::atomic::Ordering;
     let (m, n) = validate(a)?;
     config.validate()?;
     let (mut rx, mut ry) = (vec![0.0; m], vec![0.0; n]);
@@ -147,6 +157,9 @@ pub fn solve_until(
             rx.iter_mut().chain(&mut ry).for_each(|r| *r = r.max(0.0));
         }
         if t % 100 == 0 || t == config.iterations {
+            if let Some(c) = control {
+                c.check()?;
+            }
             let result = evaluate(
                 a,
                 sx.iter().map(|p| p / t as f64).collect(),
@@ -154,6 +167,11 @@ pub fn solve_until(
                 t,
                 config.tolerance,
             );
+            if let Some(c) = control {
+                c.iterations.store(t, Ordering::Relaxed);
+                c.gap_bits
+                    .store(result.nash_gap.to_bits(), Ordering::Relaxed);
+            }
             if result.converged
                 || t == config.iterations
                 || deadline.is_some_and(|d| Instant::now() >= d)

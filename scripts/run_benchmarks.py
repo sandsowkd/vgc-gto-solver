@@ -13,7 +13,7 @@ import tempfile
 import time
 
 parser=argparse.ArgumentParser()
-parser.add_argument('--binary',default='target/release/nashdex')
+parser.add_argument('--binary',default='target/release/vgc-gto-solver')
 parser.add_argument('--output',default='benchmarks/results.json')
 args=parser.parse_args()
 def run(*command):return json.loads(subprocess.check_output([args.binary,*map(str,command)]))

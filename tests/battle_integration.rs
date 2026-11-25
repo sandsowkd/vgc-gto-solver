@@ -1,12 +1,12 @@
-use nashdex::{
+use ninjask::{rng::Rng, state::SlotChoice};
+use serde_json::{Value, json};
+use vgc_gto_solver::{
     actions,
     battle::Position,
     matrix::{self, SamplingConfig},
     policy::{Policy, PolicyKind},
     rollout,
 };
-use ninjask::{rng::Rng, state::SlotChoice};
-use serde_json::{Value, json};
 fn position() -> Position {
     serde_json::from_str(include_str!("../examples/doubles.json")).unwrap()
 }
