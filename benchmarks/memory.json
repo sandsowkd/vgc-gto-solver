@@ -1,0 +1,12 @@
+{
+  "command": "nashdex solve examples/doubles.json --samples 32 --threads 10 --json",
+  "tool": "/usr/bin/time -l (macOS)",
+  "peak_resident_bytes": 29655040,
+  "runtime": {
+    "initialization_ms": 16.518791,
+    "enumeration_ms": 0.08270799999999999,
+    "payoff_estimation_ms": 3751.2670420000004,
+    "regret_minimization_ms": 17.74875,
+    "total_ms": 3785.634125
+  }
+}

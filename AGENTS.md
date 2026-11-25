@@ -1,0 +1,51 @@
+# Working on NashDex
+
+Read README.md, PROGRESS.md, docs/algorithms.md and docs/simulator-research.md first.
+The user's repository is named `vgc-solver`; the Rust package and project are NashDex.
+The enclosing directory is an unrelated Pokémon LLM repository. Work only here.
+
+## Architecture
+
+- `data`: pinned format JSON and simulator revision. `Cargo.lock` is required.
+- `battle`: validated input, team initialization, replay and move-boundary projections.
+- `actions`: simulator-authoritative complete joint choices, including targets and Mega flags.
+- `policy`: interchangeable continuation baselines, evaluated before either action is submitted.
+- `rollout`: independent battle/policy RNG streams and terminal utilities.
+- `matrix`: deterministic cell/sample streams, Rayon sweeps, censoring and confidence intervals.
+- `solver`: generic rectangular constant-sum games. Keep Pokémon mechanics out of it.
+- `search`: root solve, runtime breakdown and interpretation/uncertainty diagnostics.
+- `benchmark`: measured throughput and paired side-swapped policy experiments.
+- `main`: CLI only. No frontend in this phase.
+
+## Correctness conventions
+
+Win/loss/draw utility is 1/0/0.5. Never substitute damage or HP as the optimization objective.
+Solving the estimated root matrix with fixed continuation policies does not solve the full game.
+Player two minimizes player one's utility; keep EV perspectives explicit.
+Keep matrix Nash gap separate from simulation uncertainty and model/policy bias.
+Do not impute censored games as draws or missing matrix cells as zero. Return diagnostics without
+a point solution when the full point payoff matrix is unavailable.
+
+Full information is intentional. A policy must never read the opponent's pending choice.
+Both choices must be computed from the same pre-submission battle state.
+Do not independently optimize the two active Pokémon. Preserve engine joint constraints.
+No reserves, voluntary switching, hidden-information search or learned evaluation yet.
+Forced requests such as Revival Blessing remain delegated to the engine, restricted to the two-mon roster.
+
+Prefer source inspection and tiny differential experiments to reimplementing simulator mechanics.
+Preserve entry ability effects when an override is omitted. Hand-authored projections are advanced
+research inputs, not complete Showdown save files; replay is preferred for complex histories.
+Keep seeds stable across Rayon scheduling for fixed-work runs. Budget runs may differ.
+
+## Development
+
+Run `cargo fmt --all -- --check`, `cargo clippy --locked --all-targets -- -D warnings`,
+`cargo test --locked --release` and relevant reference checks before finishing.
+No tests may silently skip missing game data. It is bundled.
+Research scripts use a local virtual environment and `scripts/requirements-research.txt`.
+Reference clones and build artifacts belong under ignored `.cache/` or outside the repository.
+Do not alter the enclosing repository, add a blanket project license, claim unmeasured performance,
+or claim tournament strength from the illustrative fixture suite.
+
+Keep PROGRESS.md current with exact blockers and next steps. Preserve raw experiment records.
+The user requested **no intermediate commits**: finish implementation and validation before a final commit.

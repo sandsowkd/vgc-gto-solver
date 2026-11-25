@@ -1,0 +1,463 @@
+{
+  "schema_version": 1,
+  "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+  "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+  "format": "gen9championsvgc2026regmc",
+  "config": {
+    "sampling": {
+      "samples_per_cell": 256,
+      "max_turns": 256,
+      "seed": 1,
+      "threads": 2,
+      "policies": [
+        "greedy",
+        "greedy"
+      ],
+      "confidence": 0.95
+    },
+    "solver": {
+      "iterations": 50000,
+      "tolerance": 0.001,
+      "algorithm": "regret_matching_plus"
+    },
+    "budget_ms": null
+  },
+  "interpretation": "Expected terminal win/loss/draw utility (1/0/0.5) after a root action pair, then fixed continuation policies. Utility includes draw credit; it is not strictly win probability.",
+  "actions": [
+    [
+      {
+        "index": 0,
+        "choice": "move 1 1, pass",
+        "description": [
+          "Garchomp: Dragon Claw (target 1)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 1,
+        "choice": "move 1 2, pass",
+        "description": [
+          "Garchomp: Dragon Claw (target 2)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 2,
+        "choice": "move 1 -2, pass",
+        "description": [
+          "Garchomp: Dragon Claw (target -2)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 3,
+        "choice": "move 2, pass",
+        "description": [
+          "Garchomp: Protect (target 0)",
+          "pass (empty or fainted slot)"
+        ]
+      }
+    ],
+    [
+      {
+        "index": 0,
+        "choice": "move 1 1, pass",
+        "description": [
+          "Charizard: Air Slash (target 1)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 1,
+        "choice": "move 1 2, pass",
+        "description": [
+          "Charizard: Air Slash (target 2)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 2,
+        "choice": "move 1 -2, pass",
+        "description": [
+          "Charizard: Air Slash (target -2)",
+          "pass (empty or fainted slot)"
+        ]
+      },
+      {
+        "index": 3,
+        "choice": "move 2, pass",
+        "description": [
+          "Charizard: Protect (target 0)",
+          "pass (empty or fainted slot)"
+        ]
+      }
+    ]
+  ],
+  "matrix": {
+    "rows": 4,
+    "columns": 4,
+    "cells": [
+      [
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        }
+      ],
+      [
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        }
+      ],
+      [
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 0,
+          "simulated_decisions": 256,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        }
+      ],
+      [
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        },
+        {
+          "samples": 256,
+          "wins": 256,
+          "losses": 0,
+          "draws": 0,
+          "truncated": 0,
+          "cancelled_for_budget": 0,
+          "simulated_turns": 256,
+          "simulated_decisions": 512,
+          "completed_mean": 1.0,
+          "mean": 1.0,
+          "standard_error": 0.0,
+          "utility_interval": [
+            0.8112082574805453,
+            1.0
+          ]
+        }
+      ]
+    ],
+    "payoff": [
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    ],
+    "coverage_complete": true,
+    "requested_samples_complete": true,
+    "samples": 4096,
+    "truncations": 0,
+    "cancelled_for_budget": 0,
+    "truncation_rate": 0.0,
+    "confidence": 0.95,
+    "interval_method": "simultaneous anytime Hoeffding bounds across cells and sample counts, with censoring endpoints"
+  },
+  "solution": {
+    "player1": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "player2": [
+      0.25,
+      0.25,
+      0.25,
+      0.25
+    ],
+    "player1_action_values": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "player2_action_values_in_player1_utility": [
+      1.0,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "value": 1.0,
+    "lower_value": 1.0,
+    "upper_value": 1.0,
+    "nash_gap": 0.0,
+    "iterations": 100,
+    "converged": true
+  },
+  "strategy_utility_interval": [
+    0.8112082574805455,
+    1.0
+  ],
+  "nash_gap_upper_confidence_bound": 0.18879174251945474,
+  "warnings": [
+    "Equilibrium applies only to the estimated root payoff matrix under the specified continuation policies; it is not a full-game Nash equilibrium."
+  ],
+  "runtime": {
+    "initialization_ms": 9.473333,
+    "enumeration_ms": 0.005,
+    "payoff_estimation_ms": 28.925375,
+    "regret_minimization_ms": 0.004625,
+    "total_ms": 38.409208
+  }
+}

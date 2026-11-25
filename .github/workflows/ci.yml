@@ -1,0 +1,25 @@
+name: Rust and mathematical validation
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.100.0
+          components: rustfmt, clippy
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked --release
+      - run: cargo build --locked --release
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: pip install -r scripts/requirements-research.txt
+      - run: python scripts/validate_lp.py --output /tmp/lp-validation.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: bash scripts/setup-reference.sh
+      - run: python scripts/validate_showdown.py --seeds 2 --output /tmp/showdown-validation.json

@@ -1,0 +1,45 @@
+{
+  "teams": [
+    [
+      {
+        "species": "Garchomp",
+        "ability": "Rough Skin",
+        "moves": [
+          "Dragon Claw",
+          "Protect"
+        ],
+        "nature": "Jolly",
+        "points": [
+          2,
+          32,
+          0,
+          0,
+          0,
+          32
+        ],
+        "hp": 82
+      }
+    ],
+    [
+      {
+        "species": "Charizard",
+        "ability": "Blaze",
+        "moves": [
+          "Air Slash",
+          "Protect"
+        ],
+        "nature": "Timid",
+        "points": [
+          2,
+          0,
+          0,
+          32,
+          0,
+          32
+        ],
+        "hp": 65
+      }
+    ]
+  ],
+  "seed": 23
+}

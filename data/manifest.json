@@ -1,0 +1,12 @@
+{
+  "format": "gen9championsvgc2026regmc",
+  "simulator_repository": "https://github.com/dcabatin/Ninjask",
+  "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+  "showdown_repository": "https://github.com/smogon/pokemon-showdown",
+  "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+  "exporter": "refsim/export_format.js at the simulator commit above",
+  "file": "gen9championsvgc2026regmc.json",
+  "sha256": "1027edfc62afff819fb6d2bced5946012f2dc8f594c89fa4d536ce4df7a77f6e",
+  "export_date": "2026-11-24",
+  "license_notice": "../docs/licenses/pokemon-showdown-MIT.txt"
+}

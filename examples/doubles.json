@@ -1,0 +1,89 @@
+{
+  "teams": [
+    [
+      {
+        "species": "Garchomp",
+        "ability": "Rough Skin",
+        "moves": [
+          "Dragon Claw",
+          "Earthquake",
+          "Rock Slide",
+          "Protect"
+        ],
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "points": [
+          2,
+          32,
+          0,
+          0,
+          0,
+          32
+        ]
+      },
+      {
+        "species": "Rotom-Wash",
+        "ability": "Levitate",
+        "moves": [
+          "Thunderbolt",
+          "Hydro Pump",
+          "Will-O-Wisp",
+          "Protect"
+        ],
+        "item": "Sitrus Berry",
+        "nature": "Modest",
+        "points": [
+          32,
+          0,
+          2,
+          32,
+          0,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "species": "Charizard",
+        "ability": "Blaze",
+        "moves": [
+          "Heat Wave",
+          "Air Slash",
+          "Solar Beam",
+          "Protect"
+        ],
+        "item": "Charizardite Y",
+        "nature": "Timid",
+        "points": [
+          2,
+          0,
+          0,
+          32,
+          0,
+          32
+        ]
+      },
+      {
+        "species": "Clefable",
+        "ability": "Unaware",
+        "moves": [
+          "Moonblast",
+          "Follow Me",
+          "Helping Hand",
+          "Protect"
+        ],
+        "item": "Rocky Helmet",
+        "nature": "Relaxed",
+        "points": [
+          32,
+          0,
+          32,
+          0,
+          2,
+          0
+        ]
+      }
+    ]
+  ],
+  "seed": 17
+}
