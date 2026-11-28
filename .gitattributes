@@ -1,0 +1,2 @@
+# Keep GitHub language statistics focused on the solver and its tooling.
+/web/** -linguist-detectable
