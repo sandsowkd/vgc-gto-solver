@@ -59,3 +59,11 @@ or claim tournament strength from the illustrative fixture suite.
 
 Keep PROGRESS.md current with exact blockers and next steps. Preserve raw experiment records.
 The user requested **no intermediate commits**: finish implementation and validation before a final commit.
+
+## Deploy app changes
+
+After validating each completed app change, deploy the tested revision to
+`https://jeremyhua.ng/vgc` using the configured hosting workflow. Verify that the app
+loads at that URL and that `https://jeremyhua.ng/vgc/api/health` returns a healthy
+Rust API response. Report the deployed revision and URL. If the deployment workflow,
+hosting access, or live verification is unavailable, report the specific blocker.
