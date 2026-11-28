@@ -65,3 +65,18 @@ requests. A local reverse-proxy smoke test verified the `/vgc` redirect, asset s
 API health, and a native solve in Chromium at a 390 px viewport. The root build, 28 Rust
 tests, and 6 Playwright tests also passed. The live route remains pending access to the
 site's routing configuration and a host for the Rust service.
+
+## 4v4 evaluation baseline
+
+The [switching plan](docs/4v4-switching-plan.md) and [strategy evaluator and iteration prompt](docs/strategy-evaluation.md)
+define the next milestone and the evidence required to promote a search change. The first deep run
+completed 4,736,512 rollouts across three existing no-reserve positions. In `held-out.json` the
+independent reference gap ranged from 0.054 to 0.073 across three candidate seeds. The conservative
+upper bounds ranged from 0.381 to 0.407, so this did not meet the 0.05 target. The evaluator also
+verified matching fixed-work digests at one and four threads and marked a 1 ms incomplete solve
+unresolved. Raw JSON and the paired policy comparison are retained in `.cache/strategy-eval.*`
+and `.cache/strategy-match.*` in the development environment.
+
+The next app milestone is end-to-end 4v4 play with legal switches and replay, then extending the
+benchmark to frozen switch and replacement positions. A recurring 40-minute evaluation needs a
+persistent Codex scheduling capability, which this task does not expose.
