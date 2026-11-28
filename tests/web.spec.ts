@@ -89,6 +89,7 @@ test('edit all four Pokémon, import six sets, configure field, solve, inspect a
   page,
   request,
 }) => {
+  test.setTimeout(120000);
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
   await ready(page);
@@ -140,6 +141,10 @@ test('edit all four Pokémon, import six sets, configure field, solve, inspect a
   await page.getByLabel('Terrain turns', { exact: true }).fill('4');
   await expect(page.getByRole('button', { name: 'Solve position' })).toBeEnabled();
   await page.getByRole('button', { name: 'Field settings' }).click();
+  // This fixture enumerates more than 20,000 action pairs.
+  await page.getByRole('button', { name: '30s', exact: true }).click();
+  await page.getByText('Advanced solver settings', { exact: false }).click();
+  await page.getByLabel('Samples per action pair', { exact: true }).fill('1');
   await solve(page);
   await expect(page.getByRole('heading', { name: 'Strategy solution' })).toBeVisible();
   await expect(page.locator('.strategy-row')).not.toHaveCount(0);

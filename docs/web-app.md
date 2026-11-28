@@ -24,17 +24,14 @@ Open http://127.0.0.1:8787. Ship `web/dist/`, the native binary and third-party 
 
 `VGC_BIND` changes the listen address (default loopback). `VGC_THREADS` caps native solve threads (1 through min(8, logical CPUs)); default requests use at most four. `VGC_APP_ORIGIN=https://solver.example` permits a separately hosted frontend. Public deployment needs a TLS reverse proxy, authentication/rate limiting and per-user job ownership before sharing a single service with untrusted users. The current job IDs and one-job admission limit suit a personal local workspace, not multi-tenant hosting. Do not expose the local service directly to the Internet.
 
-A static Vercel frontend is viable with `/api` rewrites to a separate, long-running Rust container/VM. Static hosting cannot execute native Monte Carlo work. Single-origin Axum deployment is simpler and avoids cross-origin configuration. A conventional container can build Node assets and a matching Linux Rust binary; a macOS binary cannot run in a Linux container.
+The personal site's Vercel project builds the frontend with `npm run build -- --base=/vgc/`
+and serves it at [jeremyhua.ng/vgc](https://jeremyhua.ng/vgc). The site rewrites
+`/vgc/api/*` to the Rust function in `api/vgc.rs`. This function runs the same
+Axum API and native solver. A streaming solve stays in one invocation for its entire
+lifetime. It emits progress and a terminal result or error as server-sent events.
+Closing the stream requests cooperative cancellation. An interrupted connection can
+be retried from the same board and configuration.
 
-### Serving under `/vgc/`
-
-Build the frontend with `npm run build -- --base=/vgc/` and run the same release-mode
-Rust server with the resulting `web/dist/`. At the site's HTTPS proxy, redirect `/vgc` to
-`/vgc/` and forward `/vgc/*` to the Rust service after stripping the `/vgc` prefix.
-This forwards the HTML, assets, and API as one application while leaving the rest of
-the site on its existing routes. Preserve the public `Host` header or set
-`VGC_APP_ORIGIN=https://jeremyhua.ng` when the proxy replaces it. For personal access,
-apply the site's authentication to the entire `/vgc/` route, including its API.
 
 ## Integration and resource limits
 
@@ -46,7 +43,8 @@ The React/TypeScript app calls the Rust library through Axum; it never starts a 
 | `GET /api/catalog` | Locally bundled data, presets, usage, supported selections, limits |
 | `POST /api/validate` | One Pokémon set; returns native Champions stats |
 | `POST /api/inspect` | Board plus history → engine state, complete legal joint actions, events |
-| `POST /api/solve` | `{board, config}` → asynchronous job ID |
+| `POST /api/solve-stream` | `{board, config}` → progress events and final result or error |
+| `POST /api/solve` | Local job ID. On Vercel this also serves the streaming API. |
 | `GET /api/jobs/:id` | Phase, coverage, actual samples, numerical convergence, result/error |
 | `POST /api/jobs/:id/cancel` | Cooperative cancellation |
 | `POST /api/advance` | `{board, step}` → replayed native next state and event log |
@@ -54,7 +52,7 @@ The React/TypeScript app calls the Rust library through Axum; it never starts a 
 
 A board is `{position: <explicit-teams Position>, history: [{choices: [p1, p2], seed}]}`. History replays from its original setup with the native RNG reset to each recorded decision seed. This preserves hidden engine counters/volatiles without treating the state projection as a lossless save. Undo drops a decision and restart clears history. Battle end is inspectable. A forced replacement can pause within a turn, and a waiting side sends an empty choice. The solver models that side with one no-op action. The UI uses engine choice strings and labels the incoming reserve, move targets and Mega choices.
 
-One solve at a time; excess requests receive 429. CPU work runs in `spawn_blocking`, with Rayon threads bounded by the service cap. Web solves require a 1–60000 ms soft budget, 1–4096 samples/pair, 1–512 rollout turns, at most 500000 matrix iterations, and at most 65536 root action pairs. Request bodies are limited to 1 MiB, history to 80 decisions, retained jobs to 16, and completed-job lifetime to 15 minutes (pruned on submission). Cancellation is checked within rollout decisions and matrix iterations. A started rollout finishes after a budget deadline to avoid length-biased censoring, but explicit cancellation interrupts it and discards the job result. Edits invalidate results and cancel the corresponding browser job; version checks handle in-flight submission races.
+One solve per process at a time. Excess requests to a busy process receive 429. CPU work runs in `spawn_blocking`, with Rayon threads bounded by the service cap. Web solves require a 1–60000 ms soft budget, 1–4096 samples/pair, 1–512 rollout turns, at most 500000 matrix iterations, and at most 65536 root action pairs. Request bodies are limited to 1 MiB and history to 80 decisions. The local polling API retains at most 16 jobs and prunes completed jobs after 15 minutes on submission. Cancellation is checked within rollout decisions and matrix iterations. A started rollout finishes after a budget deadline to avoid length-biased censoring, but explicit cancellation interrupts it and discards the job result. Board edits invalidate results and abort the active solve stream.
 
 PokePaste imports accept only HTTPS `pokepast.es` and a 16-hex-digit path, with no credentials, explicit nondefault port, query or fragment. The service constructs the upstream URL itself, follows no redirects, uses an eight-second timeout, and stops downloads above 512 KiB. It cannot fetch arbitrary supplied hosts/paths. Application validation errors use `{error: {message}}`; malformed JSON/schema failures additionally use Axum's 4xx rejection text, which the client displays.
 

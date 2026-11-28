@@ -8,12 +8,14 @@ use crate::{
 };
 use axum::{
     Json, Router,
+    body::{Body, Bytes},
     extract::{DefaultBodyLimit, Path, State},
     http::{Request, StatusCode},
     middleware::{self, Next},
     response::{IntoResponse, Response},
     routing::{get, post},
 };
+use futures_util::stream;
 use ninjask::{Battle, battle::log::Viewer, rng::Rng};
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
@@ -259,7 +261,10 @@ struct Solve {
     board: Board,
     config: SearchConfig,
 }
-async fn solve(State(app): State<App>, Json(r): Json<Solve>) -> ApiResult<Value> {
+async fn prepare_solve(
+    app: &App,
+    r: Solve,
+) -> Result<(Battle, SearchConfig, tokio::sync::OwnedSemaphorePermit), ApiError> {
     let mut c = r.config;
     if !(1..=60000).contains(&c.budget_ms.unwrap_or(0))
         || c.sampling.samples_per_cell == 0
@@ -295,6 +300,68 @@ async fn solve(State(app): State<App>, Json(r): Json<Solve>) -> ApiResult<Value>
             .to_string()
             .into());
     }
+    Ok((b, c, permit))
+}
+
+fn run_solve(b: &Battle, c: &SearchConfig, control: &Control) -> crate::Result<SearchResult> {
+    let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        search::solve_battle(b, c, Instant::now(), Some(control))
+    }))
+    .unwrap_or_else(|_| Err("Simulator failed for this position".into()));
+    control.phase.store(3, Ordering::Relaxed);
+    result
+}
+
+struct CancelOnDrop(Arc<Control>);
+
+impl Drop for CancelOnDrop {
+    fn drop(&mut self) {
+        self.0.cancelled.store(true, Ordering::Relaxed);
+    }
+}
+
+async fn solve_stream(State(app): State<App>, Json(r): Json<Solve>) -> Result<Response, ApiError> {
+    let (battle, config, permit) = prepare_solve(&app, r).await?;
+    let control = Arc::new(Control::default());
+    let guard = CancelOnDrop(control.clone());
+    let task = tokio::task::spawn_blocking(move || {
+        let _permit = permit;
+        run_solve(&battle, &config, &control)
+    });
+    let ticks = tokio::time::interval(Duration::from_millis(300));
+    let events = stream::unfold(Some((guard, task, ticks)), |state| async {
+        let (guard, mut task, mut ticks) = state?;
+        let (event, next) = tokio::select! {
+            result = &mut task => {
+                let event = match result {
+                    Ok(Ok(result)) => json!({"result": result}),
+                    Ok(Err(error)) => json!({"error": error}),
+                    Err(_) => json!({"error": "Native solve interrupted"}),
+                };
+                (event, None)
+            }
+            _ = ticks.tick() => {
+                let event = json!({"progress": guard.0.snapshot()});
+                (event, Some((guard, task, ticks)))
+            }
+        };
+        Some((
+            Ok::<_, std::convert::Infallible>(Bytes::from(format!("data: {event}\n\n"))),
+            next,
+        ))
+    });
+    Ok((
+        [
+            ("content-type", "text/event-stream"),
+            ("cache-control", "no-store"),
+        ],
+        Body::from_stream(events),
+    )
+        .into_response())
+}
+
+async fn solve(State(app): State<App>, Json(r): Json<Solve>) -> ApiResult<Value> {
+    let (b, c, permit) = prepare_solve(&app, r).await?;
     let id = app.next.fetch_add(1, Ordering::Relaxed);
     let job = Arc::new(Job {
         started: Some(Instant::now()),
@@ -315,11 +382,7 @@ async fn solve(State(app): State<App>, Json(r): Json<Solve>) -> ApiResult<Value>
     }
     tokio::task::spawn_blocking(move || {
         let _permit = permit;
-        let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
-            search::solve_battle(&b, &c, Instant::now(), Some(&job.control))
-        }))
-        .unwrap_or_else(|_| Err("Simulator failed for this position".into()));
-        job.control.phase.store(3, Ordering::Relaxed);
+        let result = run_solve(&b, &c, &job.control);
         *job.result.lock().expect("result") = Some(result);
     });
     Ok(Json(json!({"id":id})))
@@ -406,7 +469,7 @@ async fn paste(State(app): State<App>, Json(p): Json<Paste>) -> ApiResult<Value>
         json!({"text":text,"title":v["title"],"author":v["author"]}),
     ))
 }
-pub async fn serve() -> crate::Result<()> {
+pub fn api_router(include_local_jobs: bool) -> crate::Result<Router> {
     let available = std::thread::available_parallelism()
         .map_or(1, usize::from)
         .min(8);
@@ -429,7 +492,7 @@ pub async fn serve() -> crate::Result<()> {
             .build()
             .map_err(|e| e.to_string())?,
     };
-    let router = Router::new()
+    let mut router = Router::new()
         .route(
             "/api/health",
             get(|| async {
@@ -443,16 +506,26 @@ pub async fn serve() -> crate::Result<()> {
         .route("/api/validate", post(validate))
         .route("/api/inspect", post(inspect))
         .route("/api/advance", post(advance))
-        .route("/api/solve", post(solve))
-        .route("/api/jobs/{id}", get(job))
-        .route("/api/jobs/{id}/cancel", post(cancel))
-        .route("/api/import", post(paste))
+        .route("/api/solve-stream", post(solve_stream))
+        .route("/api/import", post(paste));
+    if include_local_jobs {
+        router = router
+            .route("/api/solve", post(solve))
+            .route("/api/jobs/{id}", get(job))
+            .route("/api/jobs/{id}/cancel", post(cancel));
+    } else {
+        router = router.route("/api/solve", post(solve_stream));
+    }
+    Ok(router
         .with_state(app)
         .layer(DefaultBodyLimit::max(1048576))
-        .layer(middleware::from_fn(origin_guard))
-        .fallback_service(
-            ServeDir::new("web/dist").not_found_service(ServeFile::new("web/dist/index.html")),
-        );
+        .layer(middleware::from_fn(origin_guard)))
+}
+
+pub async fn serve() -> crate::Result<()> {
+    let router = api_router(true)?.fallback_service(
+        ServeDir::new("web/dist").not_found_service(ServeFile::new("web/dist/index.html")),
+    );
     let bind = std::env::var("VGC_BIND").unwrap_or_else(|_| "127.0.0.1:8787".into());
     let listener = tokio::net::TcpListener::bind(&bind)
         .await

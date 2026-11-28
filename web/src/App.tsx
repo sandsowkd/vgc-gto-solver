@@ -27,7 +27,7 @@ import {
   Undo2,
   Upload,
 } from 'lucide-react';
-import { api } from './api';
+import { api, solveStream } from './api';
 import {
   clone,
   id,
@@ -563,8 +563,7 @@ function Workspace({ cat }: { cat: Catalog }) {
     [modal, setModal] = useState(''),
     [config, setConfig] = useState<Config>(defaultConfig),
     [result, setResult] = useState<SearchResult | null>(null),
-    [job, setJob] = useState<number | null>(null),
-    [starting, setStarting] = useState(false),
+    [busy, setBusy] = useState(false),
     [progress, setProgress] = useState<Progress | null>(null),
     [elapsed, setElapsed] = useState(0),
     [choices, setChoices] = useState<[string, string]>(['', '']),
@@ -572,7 +571,7 @@ function Workspace({ cat }: { cat: Catalog }) {
     [advanceBusy, setAdvanceBusy] = useState(false),
     [showField, setShowField] = useState(false);
   const version = useRef(0),
-    jobRef = useRef<number | null>(null),
+    solveRef = useRef<AbortController | null>(null),
     turnRef = useRef<HTMLElement>(null);
   const notify = useCallback((s: string) => {
     setToast(s);
@@ -580,11 +579,9 @@ function Workspace({ cat }: { cat: Catalog }) {
   }, []);
   const change = useCallback((b: Board) => {
     version.current++;
-    if (jobRef.current !== null) {
-      void api(`jobs/${jobRef.current}/cancel`, {});
-      jobRef.current = null;
-      setJob(null);
-    }
+    solveRef.current?.abort();
+    solveRef.current = null;
+    setBusy(false);
     setBoard(b);
     setResult(null);
     setProgress(null);
@@ -620,73 +617,37 @@ function Workspace({ cat }: { cat: Catalog }) {
       controller.abort();
     };
   }, [board, notify]);
-  useEffect(() => {
-    if (job === null) return;
-    let disposed = false;
-    let timer: ReturnType<typeof setTimeout>;
+  useEffect(() => () => solveRef.current?.abort(), []);
+  async function solve() {
+    const controller = new AbortController();
+    solveRef.current = controller;
+    setBusy(true);
+    setError('');
+    setResult(null);
+    setProgress(null);
+    setElapsed(0);
     const start = performance.now();
     const tick = setInterval(() => setElapsed(performance.now() - start), 100);
-    async function poll() {
-      try {
-        const v = await api<{
-          status: string;
-          progress: Progress;
-          result: SearchResult | null;
-          error: string | null;
-        }>(`jobs/${job}`);
-        if (disposed) return;
-        setProgress(v.progress);
-        if (v.status === 'complete') {
-          setResult(v.result);
-          setJob(null);
-          jobRef.current = null;
-          notify('Solve complete');
-        } else if (v.status === 'error' || v.status === 'cancelled') {
-          if (v.error && v.status !== 'cancelled') setError(v.error);
-          setJob(null);
-          jobRef.current = null;
-        } else timer = setTimeout(poll, 300);
-      } catch (e) {
-        if (!disposed) {
-          setError((e as Error).message);
-          setJob(null);
-          jobRef.current = null;
-        }
-      }
-    }
-    void poll();
-    return () => {
-      disposed = true;
-      clearTimeout(timer);
-      clearInterval(tick);
-    };
-  }, [job, notify]);
-  async function solve() {
-    setError('');
-    setStarting(true);
-    setResult(null);
-    setElapsed(0);
-    const v = version.current;
     try {
-      const r = await api<{ id: number }>('solve', { board, config });
-      if (v !== version.current) {
-        await api(`jobs/${r.id}/cancel`, {});
-        return;
+      const data = await solveStream({ board, config }, controller.signal, setProgress);
+      if (!controller.signal.aborted) {
+        setResult(data);
+        notify('Solve complete');
       }
-      jobRef.current = r.id;
-      setJob(r.id);
     } catch (e) {
-      setError((e as Error).message);
+      if (!controller.signal.aborted) setError((e as Error).message);
     } finally {
-      setStarting(false);
+      clearInterval(tick);
+      if (solveRef.current === controller) {
+        solveRef.current = null;
+        setBusy(false);
+      }
     }
   }
-  async function cancel() {
-    if (jobRef.current !== null) {
-      await api(`jobs/${jobRef.current}/cancel`, {});
-      jobRef.current = null;
-    }
-    setJob(null);
+  function cancel() {
+    solveRef.current?.abort();
+    solveRef.current = null;
+    setBusy(false);
     setProgress(null);
     notify('Solve cancelled');
   }
@@ -771,7 +732,6 @@ function Workspace({ cat }: { cat: Catalog }) {
       setAdvanceBusy(false);
     }
   }
-  const busy = job !== null || starting;
   function setSettings(c: Config) {
     version.current++;
     setConfig(c);
@@ -1224,7 +1184,7 @@ function Workspace({ cat }: { cat: Catalog }) {
               </span>
             </div>
             {busy ? (
-              <button className="cancel-button" onClick={cancel} disabled={starting}>
+              <button className="cancel-button" onClick={cancel}>
                 <Square size={15} />
                 Cancel solve
               </button>
@@ -1352,7 +1312,7 @@ function Workspace({ cat }: { cat: Catalog }) {
               <div>
                 <LoaderCircle size={16} className="spin" />
                 <strong>
-                  {starting
+                  {!progress || progress.phase === 'initializing'
                     ? 'Starting native solve…'
                     : progress?.phase === 'solving'
                       ? 'Minimizing matrix regret…'

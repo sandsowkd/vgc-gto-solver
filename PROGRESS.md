@@ -60,11 +60,14 @@ docs/ui-research-and-data.md for architecture, sources and exact caveats.
 
 ## Deployment path
 
-A production build with `--base=/vgc/` now uses that base for browser navigation and API
-requests. A local reverse-proxy smoke test verified the `/vgc` redirect, asset serving,
-API health, and a native solve in Chromium at a 390 px viewport. The root build, 28 Rust
-tests, and 6 Playwright tests also passed. The live route remains pending access to the
-site's routing configuration and a host for the Rust service.
+The production frontend uses `--base=/vgc/`. The Vercel Rust function
+returns solve progress and results on the initiating request, and the browser
+aborts the stream to cancel. The local API also supports its existing polling
+routes. The personal website keeps its static build and routes around the app.
+The preview built the Rust function and passed the site's packaging checks.
+Locally, Rust formatting and Clippy checks, 31 release tests, the production
+frontend build, and all 7 Playwright tests passed. The Vercel adapter also
+returned a strategy for a 60 × 96 doubles matrix in a local streaming smoke test.
 
 ## 4v4 evaluation baseline
 
@@ -94,9 +97,7 @@ waiting player has one no-op action in the solve. The editor still supports no-r
   0.411–0.604, so it does not establish a stronger follow-up policy.
 
 Next, add a frozen corpus of switching and replacement positions and compare a switch-aware
-continuation policy to the current baselines at equal compute. The session has no persistent
-40-minute scheduling tool. Live deployment remains blocked by missing hosting access and an
-egress denial to `jeremyhua.ng`.
+continuation policy to the current baselines at equal compute.
 
 ## Deeper strategy audit
 
