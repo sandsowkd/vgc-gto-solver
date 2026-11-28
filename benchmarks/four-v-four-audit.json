@@ -1,0 +1,364 @@
+{
+  "scope": "One illustrative full-information four-on-four Reg M-C position.",
+  "strategy_evaluation": {
+    "schema_version": 2,
+    "status": "complete",
+    "created_utc": "2026-11-28T16:30:15.432141+00:00",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "profile": "deep",
+    "gap_target": 0.05,
+    "interval_method": "Fixed-work weighted Hoeffding with simultaneous coverage across the reported fixtures and candidate seeds",
+    "candidate_binary_sha256": "694afc7c61a836cb3f7e189a12a2820d40cf329bc30109779ec8848b53e93933",
+    "reference_binary_sha256": "041c371657cc43e417c32613f6090db54d39916a69e73a6ca2a53e2c1da114c4",
+    "fixtures": [
+      {
+        "fixture": "examples/four-v-four.json",
+        "sha256": "653061e069915187fafe14eac9d51d315187c1799a12dfb4c28224351a5b7c2f",
+        "reference": {
+          "config": {
+            "sampling": {
+              "samples_per_cell": 256,
+              "max_turns": 256,
+              "seed": 810293,
+              "threads": 3,
+              "policies": [
+                "greedy",
+                "greedy"
+              ],
+              "confidence": 0.95
+            },
+            "solver": {
+              "iterations": 50000,
+              "tolerance": 0.001,
+              "algorithm": "regret_matching_plus"
+            },
+            "budget_ms": null
+          },
+          "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+          "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+          "format": "gen9championsvgc2026regmc",
+          "shape": [
+            94,
+            98
+          ],
+          "samples": 2358272,
+          "coverage_complete": true,
+          "truncations": 0,
+          "requested_samples_complete": true,
+          "cancelled_for_budget": 0,
+          "elapsed_ms": 340164.4229970006,
+          "runtime": {
+            "initialization_ms": 50.141816,
+            "enumeration_ms": 0.095473,
+            "payoff_estimation_ms": 339930.932979,
+            "regret_minimization_ms": 75.81629199999999,
+            "total_ms": 340057.096877
+          },
+          "matrix_gap": 0.000981879220158799,
+          "result_sha256": "e02866961023207fe260e4eb142b1c131429154e63036041c26aa57a69e66406"
+        },
+        "candidates": [
+          {
+            "run": {
+              "config": {
+                "sampling": {
+                  "samples_per_cell": 32,
+                  "max_turns": 256,
+                  "seed": 11,
+                  "threads": 3,
+                  "policies": [
+                    "greedy",
+                    "greedy"
+                  ],
+                  "confidence": 0.95
+                },
+                "solver": {
+                  "iterations": 50000,
+                  "tolerance": 0.001,
+                  "algorithm": "regret_matching_plus"
+                },
+                "budget_ms": null
+              },
+              "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+              "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+              "format": "gen9championsvgc2026regmc",
+              "shape": [
+                94,
+                98
+              ],
+              "samples": 294784,
+              "coverage_complete": true,
+              "truncations": 0,
+              "requested_samples_complete": true,
+              "cancelled_for_budget": 0,
+              "elapsed_ms": 38591.60335500201,
+              "runtime": {
+                "initialization_ms": 45.858271,
+                "enumeration_ms": 0.27923,
+                "payoff_estimation_ms": 38336.061772,
+                "regret_minimization_ms": 131.483263,
+                "total_ms": 38513.766322999996
+              },
+              "matrix_gap": 0.0009997955069427356,
+              "result_sha256": "855f96db7c5c531578e28bdf4fd6234f5a7f41227385feeb77bbc8de8c839e4e"
+            },
+            "reference_score": {
+              "status": "scored",
+              "utility": 0.8554706900526656,
+              "utility_interval": [
+                0.8302720405439202,
+                0.880669339561411
+              ],
+              "player1_best_response": "move 4, move 1 1",
+              "player2_best_response": "move 2 1, move 3",
+              "player1_deviation_gain": 0.02458343750180081,
+              "player2_deviation_gain": 0.045008759517579766,
+              "player1_deviation_interval": [
+                0,
+                0.1071470130776373
+              ],
+              "player2_deviation_interval": [
+                0,
+                0.13175099659231226
+              ],
+              "gap": 0.06959219701938058,
+              "gap_interval": [
+                0,
+                0.18850071065245877
+              ],
+              "cellwise_gap_interval": [
+                0,
+                0.4040680653587675
+              ],
+              "meets_target": false
+            }
+          },
+          {
+            "run": {
+              "config": {
+                "sampling": {
+                  "samples_per_cell": 32,
+                  "max_turns": 256,
+                  "seed": 29,
+                  "threads": 3,
+                  "policies": [
+                    "greedy",
+                    "greedy"
+                  ],
+                  "confidence": 0.95
+                },
+                "solver": {
+                  "iterations": 50000,
+                  "tolerance": 0.001,
+                  "algorithm": "regret_matching_plus"
+                },
+                "budget_ms": null
+              },
+              "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+              "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+              "format": "gen9championsvgc2026regmc",
+              "shape": [
+                94,
+                98
+              ],
+              "samples": 294784,
+              "coverage_complete": true,
+              "truncations": 0,
+              "requested_samples_complete": true,
+              "cancelled_for_budget": 0,
+              "elapsed_ms": 39059.12490699848,
+              "runtime": {
+                "initialization_ms": 37.364782,
+                "enumeration_ms": 0.29902999999999996,
+                "payoff_estimation_ms": 38835.442069000004,
+                "regret_minimization_ms": 122.76717,
+                "total_ms": 38995.945980000004
+              },
+              "matrix_gap": 0.0009982881204884109,
+              "result_sha256": "fea134d5083d55cddf1b19f2dd517c1352240f69081b5655756c43f4bddfd690"
+            },
+            "reference_score": {
+              "status": "scored",
+              "utility": 0.8430889759430628,
+              "utility_interval": [
+                0.8168386604430904,
+                0.8693392914430351
+              ],
+              "player1_best_response": "switch 4, move 2 1",
+              "player2_best_response": "switch 4, move 3",
+              "player1_deviation_gain": 0.046912197793441246,
+              "player2_deviation_gain": 0.02470796597348457,
+              "player1_deviation_interval": [
+                0,
+                0.13270907368918006
+              ],
+              "player2_deviation_interval": [
+                0,
+                0.11272148708961838
+              ],
+              "gap": 0.07162016376692582,
+              "gap_interval": [
+                0,
+                0.1929299297788537
+              ],
+              "cellwise_gap_interval": [
+                0,
+                0.39614395740447605
+              ],
+              "meets_target": false
+            }
+          },
+          {
+            "run": {
+              "config": {
+                "sampling": {
+                  "samples_per_cell": 32,
+                  "max_turns": 256,
+                  "seed": 47,
+                  "threads": 3,
+                  "policies": [
+                    "greedy",
+                    "greedy"
+                  ],
+                  "confidence": 0.95
+                },
+                "solver": {
+                  "iterations": 50000,
+                  "tolerance": 0.001,
+                  "algorithm": "regret_matching_plus"
+                },
+                "budget_ms": null
+              },
+              "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+              "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+              "format": "gen9championsvgc2026regmc",
+              "shape": [
+                94,
+                98
+              ],
+              "samples": 294784,
+              "coverage_complete": true,
+              "truncations": 0,
+              "requested_samples_complete": true,
+              "cancelled_for_budget": 0,
+              "elapsed_ms": 39491.13948499871,
+              "runtime": {
+                "initialization_ms": 57.466156,
+                "enumeration_ms": 0.256656,
+                "payoff_estimation_ms": 39166.463283,
+                "regret_minimization_ms": 195.865607,
+                "total_ms": 39420.127275
+              },
+              "matrix_gap": 0.0009925924331245506,
+              "result_sha256": "78e5b53aea1d1c83eb9f3c6b4b65863d9fb16730afb14f8ff87bd68074e69f5f"
+            },
+            "reference_score": {
+              "status": "scored",
+              "utility": 0.8446957342875527,
+              "utility_interval": [
+                0.8145953534338672,
+                0.8747961151412382
+              ],
+              "player1_best_response": "switch 4, move 2 1",
+              "player2_best_response": "switch 4, move 3",
+              "player1_deviation_gain": 0.044170835178601875,
+              "player2_deviation_gain": 0.08498996999598663,
+              "player1_deviation_interval": [
+                0,
+                0.12773423633645986
+              ],
+              "player2_deviation_interval": [
+                0,
+                0.19397100111135213
+              ],
+              "gap": 0.1291608051745885,
+              "gap_interval": [
+                0,
+                0.261504475740441
+              ],
+              "cellwise_gap_interval": [
+                0,
+                0.45328479934553956
+              ],
+              "meets_target": false
+            }
+          }
+        ]
+      }
+    ],
+    "correctness_checks": "passed",
+    "all_gap_targets_met": false,
+    "binary_provenance": "The fixed-work reference started on the previous executable; all three candidate invocations started after linking the new exact-reference CLI. The sampling solver code was unchanged."
+  },
+  "exact_references": [
+    {
+      "fixture": "examples/two-hit-race.json",
+      "result": {
+        "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+        "format": "gen9championsvgc2026regmc",
+        "limits": {
+          "decisions": 1,
+          "action_pairs": 256,
+          "chance_paths_per_pair": 1024
+        },
+        "work": {
+          "action_pairs": 9,
+          "terminal_leaves": 0,
+          "horizon_cutoffs": 9,
+          "action_pair_cutoffs": 0,
+          "chance_path_cutoffs": 0
+        },
+        "game_value_interval": [
+          0.0,
+          1.0
+        ]
+      }
+    },
+    {
+      "fixture": "examples/two-hit-race.json",
+      "result": {
+        "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+        "format": "gen9championsvgc2026regmc",
+        "limits": {
+          "decisions": 2,
+          "action_pairs": 256,
+          "chance_paths_per_pair": 1024
+        },
+        "work": {
+          "action_pairs": 90,
+          "terminal_leaves": 81,
+          "horizon_cutoffs": 0,
+          "action_pair_cutoffs": 0,
+          "chance_path_cutoffs": 0
+        },
+        "game_value_interval": [
+          0.9999999999979976,
+          1.0
+        ]
+      }
+    },
+    {
+      "fixture": "examples/endgame.json",
+      "result": {
+        "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+        "format": "gen9championsvgc2026regmc",
+        "limits": {
+          "decisions": 1,
+          "action_pairs": 256,
+          "chance_paths_per_pair": 1
+        },
+        "work": {
+          "action_pairs": 16,
+          "terminal_leaves": 0,
+          "horizon_cutoffs": 0,
+          "action_pair_cutoffs": 0,
+          "chance_path_cutoffs": 16
+        },
+        "game_value_interval": [
+          0.0,
+          1.0
+        ]
+      }
+    }
+  ]
+}

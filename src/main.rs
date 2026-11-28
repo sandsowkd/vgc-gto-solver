@@ -42,6 +42,16 @@ enum Command {
         #[arg(long)]
         json: bool,
     },
+    /// Bound the optimal whole-battle value of a tiny full-information position.
+    ExactReference {
+        input: PathBuf,
+        #[arg(long, default_value_t = 2)]
+        decisions: u8,
+        #[arg(long, default_value_t = 256)]
+        action_pairs: usize,
+        #[arg(long, default_value_t = 1024)]
+        chance_paths_per_pair: u64,
+    },
     /// Solve an arbitrary numeric matrix, independently of Pokémon.
     Matrix {
         input: PathBuf,
@@ -187,6 +197,19 @@ fn run() -> vgc_gto_solver::Result<()> {
             }
             Ok(())
         }
+        Command::ExactReference {
+            input,
+            decisions,
+            action_pairs,
+            chance_paths_per_pair,
+        } => output(&vgc_gto_solver::exact::evaluate(
+            &read(&input)?,
+            vgc_gto_solver::exact::Limits {
+                decisions,
+                action_pairs,
+                chance_paths_per_pair,
+            },
+        )?),
         Command::Matrix {
             input,
             iterations,

@@ -4,6 +4,7 @@ pub mod actions;
 pub mod battle;
 pub mod benchmark;
 pub mod data;
+pub mod exact;
 pub mod matrix;
 pub mod policy;
 pub mod rollout;

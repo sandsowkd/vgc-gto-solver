@@ -97,3 +97,19 @@ Next, add a frozen corpus of switching and replacement positions and compare a s
 continuation policy to the current baselines at equal compute. The session has no persistent
 40-minute scheduling tool. Live deployment remains blocked by missing hosting access and an
 egress denial to `jeremyhua.ng`.
+
+## Deeper strategy audit
+
+The [4v4 audit](benchmarks/four-v-four-audit.json) completed 3,242,624 rollouts in about
+7 minutes 37 seconds on three threads. Three independently seeded 32-sample candidates were
+scored against a fresh 256-sample reference for the same 9,212 legal pairs. The estimated
+combined gain from unilateral deviations was 0.070–0.129. The new simultaneous weighted
+intervals reduced the upper gap bounds from 0.396–0.453 to 0.189–0.262 on those same samples.
+The 0.05 target remains unmet, and the audit uses fixed continuation policies.
+
+The `exact-reference` CLI checks small full-information game values across multiple decisions.
+On `examples/two-hit-race.json`, one decision left `[0, 1]` and two reached all terminal leaves
+with player-one utility effectively 1. A chance-path cutoff was reported separately and left
+its result unresolved. The `solve` path is unchanged. All 31 Rust tests passed and eight seeded
+Showdown games agreed on 146 states. The next research check is a whole-battle best response
+against a fixed policy on small games, followed by switch-aware policy comparisons on 4v4.

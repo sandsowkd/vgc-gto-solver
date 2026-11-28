@@ -59,6 +59,9 @@ cargo run --locked --release -- solve examples/doubles.json --samples 32 --threa
 
 # Generic matrix game, independently of Pokémon
 ./target/release/vgc-gto-solver matrix examples/matching-pennies.json
+
+# Whole-battle value reference for a tiny position with known terminal outcomes
+./target/release/vgc-gto-solver exact-reference examples/two-hit-race.json --decisions 2
 ```
 
 The Rust CLI requires no Node process, web server or game-data download at runtime. The first

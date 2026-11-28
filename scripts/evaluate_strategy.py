@@ -20,14 +20,20 @@ PROFILES = {"quick": (8, 64, (11, 29)), "deep": (32, 256, (11, 29, 47))}
 REFERENCE_SEED = 810271
 
 
-def solve(binary, fixture, samples, seed, policy, threads, timeout, budget_ms=None):
+def binary_digest(binary):
+    return hashlib.sha256(binary.read_bytes()).hexdigest()
+
+
+def solve(binary, digest, fixture, samples, seed, policy, threads, timeout, budget_ms=None):
     command = [str(binary), "solve", str(fixture), "--samples", str(samples), "--seed", str(seed),
                "--policy", policy, "--threads", str(threads), "--json"]
     if budget_ms is not None:
         command.extend(("--budget-ms", str(budget_ms)))
+    require(binary_digest(binary) == digest, f"Solver executable changed during evaluation: {binary}")
     start = time.perf_counter()
     run = json.loads(subprocess.check_output(command, cwd=ROOT, timeout=timeout))
     run["elapsed_ms"] = (time.perf_counter() - start) * 1000
+    require(binary_digest(binary) == digest, f"Solver executable changed during evaluation: {binary}")
     validate(run, samples)
     return run
 
@@ -93,28 +99,73 @@ def align(candidate, reference, side):
     return [strategy[key] for key in keys]
 
 
-def value_and_responses(matrix, x, y):
+def action_values(matrix, x, y):
     row_values = [sum(p * payoff for p, payoff in zip(y, row, strict=True)) for row in matrix]
     col_values = [sum(p * payoff for p, payoff in zip(x, col, strict=True)) for col in zip(*matrix)]
+    return row_values, col_values
+
+
+def value_and_responses(matrix, x, y):
+    row_values, col_values = action_values(matrix, x, y)
     return sum(p * value for p, value in zip(x, row_values, strict=True)), max(row_values), min(col_values)
 
 
-def score(candidate, reference, target):
+def weighted_interval(mean, squared_weight, concentration):
+    radius = math.sqrt(concentration * squared_weight)
+    return max(0, mean - radius), min(1, mean + radius)
+
+
+def response_bounds(cells, x, y, row_values, col_values, value, concentration):
+    # Each cell mean is an average of independent bounded rollout outcomes.
+    # An individual sample in cell i,j has weight prob(j) / n_ij for a row,
+    # prob(i) / n_ij for a column, or prob(i) * prob(j) / n_ij for mix utility.
+    row_weights = [sum(p * p / cell["samples"] for p, cell in zip(y, row, strict=True)) for row in cells]
+    col_weights = [sum(p * p / cell["samples"] for p, cell in zip(x, col, strict=True)) for col in zip(*cells)]
+    rows = [weighted_interval(v, w, concentration) for v, w in zip(row_values, row_weights, strict=True)]
+    cols = [weighted_interval(v, w, concentration) for v, w in zip(col_values, col_weights, strict=True)]
+    value_weight = sum(p * p * w for p, w in zip(x, row_weights, strict=True))
+    mix = weighted_interval(value, value_weight, concentration)
+    best_p1 = [max(row[k] for row in rows) for k in range(2)]
+    best_p2 = [min(col[k] for col in cols) for k in range(2)]
+    return mix, best_p1, best_p2
+
+
+def interval_difference(a, b):
+    return [max(0, a[0] - b[1]), min(1, a[1] - b[0])]
+
+
+def score(candidate, reference, target, comparisons):
     if candidate["solution"] is None or reference["matrix"]["payoff"] is None:
         return {"status": "unresolved", "meets_target": False}
     for field in ("format", "simulator_commit", "showdown_commit"):
         require(candidate[field] == reference[field], f"Candidate and reference differ on {field}")
     x, y = (align(candidate, reference, side) for side in range(2))
     matrix = reference["matrix"]
-    value, upper, lower = value_and_responses(matrix["payoff"], x, y)
+    require(matrix["requested_samples_complete"], "Weighted intervals require an independent fixed-work reference")
+    row_values, col_values = action_values(matrix["payoff"], x, y)
+    value = sum(p * v for p, v in zip(x, row_values, strict=True))
+    best_row = max(range(len(x)), key=row_values.__getitem__)
+    best_col = min(range(len(y)), key=col_values.__getitem__)
+    upper, lower = row_values[best_row], col_values[best_col]
+    tests = (len(x) + len(y) + 1) * comparisons
+    concentration = math.log(2 * tests / (1 - matrix["confidence"])) / 2
+    mix, upper_band, lower_band = response_bounds(matrix["cells"], x, y, row_values, col_values, value, concentration)
+    gap_band = interval_difference(upper_band, lower_band)
+
+    # Keep the previous method for direct comparisons on the same samples.
     lo = [[cell["utility_interval"][0] for cell in row] for row in matrix["cells"]]
     hi = [[cell["utility_interval"][1] for cell in row] for row in matrix["cells"]]
-    value_lo, upper_lo, lower_lo = value_and_responses(lo, x, y)
-    value_hi, upper_hi, lower_hi = value_and_responses(hi, x, y)
-    gap_lo, gap_hi = max(0, upper_lo - lower_hi), min(1, upper_hi - lower_lo)
-    return {"status": "scored", "utility": value, "utility_interval": [value_lo, value_hi],
+    _, upper_lo, lower_lo = value_and_responses(lo, x, y)
+    _, upper_hi, lower_hi = value_and_responses(hi, x, y)
+    return {"status": "scored", "utility": value, "utility_interval": mix,
+            "player1_best_response": reference["actions"][0][best_row]["choice"],
+            "player2_best_response": reference["actions"][1][best_col]["choice"],
             "player1_deviation_gain": upper - value, "player2_deviation_gain": value - lower,
-            "gap": upper - lower, "gap_interval": [gap_lo, gap_hi], "meets_target": gap_hi <= target}
+            "player1_deviation_interval": interval_difference(upper_band, mix),
+            "player2_deviation_interval": interval_difference(mix, lower_band),
+            "gap": upper - lower, "gap_interval": gap_band,
+            "cellwise_gap_interval": interval_difference([upper_lo, upper_hi], [lower_lo, lower_hi]),
+            "meets_target": gap_band[1] <= target}
 
 
 def summarize(run):
@@ -158,6 +209,8 @@ def main():
     parser.add_argument("--fixture", type=Path, action="append", help="Position JSON; repeat to add fixtures")
     parser.add_argument("--samples", type=positive_int, help="Candidate samples per action pair")
     parser.add_argument("--reference-samples", type=positive_int, help="Reference samples per action pair")
+    parser.add_argument("--reference-seed", type=int, default=REFERENCE_SEED,
+                        help="Independent fixed-work seed; rotate for confirmatory runs")
     parser.add_argument("--policy", choices=("random", "greedy", "tactical"), default="greedy")
     parser.add_argument("--reference-policy", choices=("random", "greedy", "tactical"), default="greedy")
     parser.add_argument("--threads", type=positive_int, default=min(4, os.cpu_count() or 1))
@@ -176,26 +229,31 @@ def main():
     reference_samples = args.reference_samples or reference_samples
     if reference_samples <= samples:
         parser.error("--reference-samples must exceed --samples")
+    if args.reference_seed in seeds or not 0 <= args.reference_seed <= 2**64 - 1:
+        parser.error("--reference-seed must be a u64 distinct from the candidate seeds")
     binary = args.binary.resolve()
     evaluator = args.reference_binary.resolve() if args.reference_binary else binary
     paths = [p.resolve() for p in args.fixture] if args.fixture else [ROOT / p for p in FIXTURES]
-    report = {"schema_version": 1, "status": "in_progress", "created_utc": datetime.now(timezone.utc).isoformat(),
+    comparisons = len(seeds) * len(paths)
+    report = {"schema_version": 2, "status": "in_progress", "created_utc": datetime.now(timezone.utc).isoformat(),
               "platform": platform.platform(), "profile": args.profile, "gap_target": args.gap_target,
-              "candidate_binary_sha256": hashlib.sha256(binary.read_bytes()).hexdigest(),
-              "reference_binary_sha256": hashlib.sha256(evaluator.read_bytes()).hexdigest(), "fixtures": []}
+              "interval_method": "Fixed-work weighted Hoeffding with simultaneous coverage across the reported fixtures and candidate seeds",
+              "candidate_binary_sha256": binary_digest(binary),
+              "reference_binary_sha256": binary_digest(evaluator), "fixtures": []}
     output.parent.mkdir(parents=True, exist_ok=True)
     output.touch(exist_ok=False)
     save_report(output, report)
     for fixture in paths:
-        ref = solve(evaluator, fixture, reference_samples, REFERENCE_SEED,
+        ref = solve(evaluator, report["reference_binary_sha256"], fixture, reference_samples, args.reference_seed,
                     args.reference_policy, args.threads, args.timeout)
         entry = {"fixture": str(fixture), "sha256": hashlib.sha256(fixture.read_bytes()).hexdigest(),
                  "reference": summarize(ref), "candidates": []}
         report["fixtures"].append(entry)
         save_report(output, report)
         for seed in seeds:
-            candidate = solve(binary, fixture, samples, seed, args.policy, args.threads, args.timeout, args.budget_ms)
-            metrics = score(candidate, ref, args.gap_target)
+            candidate = solve(binary, report["candidate_binary_sha256"], fixture, samples, seed,
+                              args.policy, args.threads, args.timeout, args.budget_ms)
+            metrics = score(candidate, ref, args.gap_target, comparisons)
             entry["candidates"].append({"run": summarize(candidate), "reference_score": metrics})
             save_report(output, report)
             print(f"{fixture.name} seed {seed}: {json.dumps(metrics)}", flush=True)
