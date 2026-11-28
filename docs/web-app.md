@@ -26,6 +26,16 @@ Open http://127.0.0.1:8787. Ship `web/dist/`, the native binary and third-party 
 
 A static Vercel frontend is viable with `/api` rewrites to a separate, long-running Rust container/VM. Static hosting cannot execute native Monte Carlo work. Single-origin Axum deployment is simpler and avoids cross-origin configuration. A conventional container can build Node assets and a matching Linux Rust binary; a macOS binary cannot run in a Linux container.
 
+### Serving under `/vgc/`
+
+Build the frontend with `npm run build -- --base=/vgc/` and run the same release-mode
+Rust server with the resulting `web/dist/`. At the site's HTTPS proxy, redirect `/vgc` to
+`/vgc/` and forward `/vgc/*` to the Rust service after stripping the `/vgc` prefix.
+This forwards the HTML, assets, and API as one application while leaving the rest of
+the site on its existing routes. Preserve the public `Host` header or set
+`VGC_APP_ORIGIN=https://jeremyhua.ng` when the proxy replaces it. For personal access,
+apply the site's authentication to the entire `/vgc/` route, including its API.
+
 ## Integration and resource limits
 
 The React/TypeScript app calls the Rust library through Axum; it never starts a CLI subprocess per solve and contains no second damage engine. API routes:

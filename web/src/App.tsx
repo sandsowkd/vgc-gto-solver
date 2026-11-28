@@ -709,7 +709,7 @@ function Workspace({ cat }: { cat: Catalog }) {
   return (
     <>
       <header className="app-header">
-        <a href="/" className="brand" aria-label="vgc-gto-solver home">
+        <a href={import.meta.env.BASE_URL} className="brand" aria-label="vgc-gto-solver home">
           <span className="brand-mark">
             V<span>G</span>
           </span>

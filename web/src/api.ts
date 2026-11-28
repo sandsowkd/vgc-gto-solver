@@ -1,5 +1,5 @@
 export async function api<T>(path: string, body?: unknown, signal?: AbortSignal): Promise<T> {
-  const r = await fetch('/api/' + path, {
+  const r = await fetch(`${import.meta.env.BASE_URL}api/${path}`, {
     method: body === undefined ? 'GET' : 'POST',
     headers: body === undefined ? {} : { 'Content-Type': 'application/json' },
     body: body === undefined ? undefined : JSON.stringify(body),

@@ -57,3 +57,11 @@ Implementation and validation are complete. No intermediate commits were made. N
 statistical efficiency / held-out strategy quality, safe edits to current replay boundaries,
 and authenticated deployment if public multi-user access is desired. See docs/web-app.md and
 docs/ui-research-and-data.md for architecture, sources and exact caveats.
+
+## Deployment path
+
+A production build with `--base=/vgc/` now uses that base for browser navigation and API
+requests. A local reverse-proxy smoke test verified the `/vgc` redirect, asset serving,
+API health, and a native solve in Chromium at a 390 px viewport. The root build, 28 Rust
+tests, and 6 Playwright tests also passed. The live route remains pending access to the
+site's routing configuration and a host for the Rust service.
