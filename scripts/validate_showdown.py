@@ -62,6 +62,7 @@ try:
         # Mirror matchup deliberately exercises speed ties.
         mirror=copy.deepcopy(fixtures[0]);mirror['teams']=[copy.deepcopy(mirror['teams'][0]),copy.deepcopy(mirror['teams'][0])]
         fixtures.append(mirror)
+        fixtures.append(json.loads(Path('examples/four-v-four.json').read_text()))
         for f,position in enumerate(fixtures):
             for seed in range(args.seeds):
                 p=copy.deepcopy(position);p['reference_seed']='sodium,'+f'{seed:064x}'
@@ -78,6 +79,7 @@ try:
                     choices=[rng.choice(a)['choice'] for a in inspected['actions']]
                     p['replay'].append(choices)
                     for s,c in enumerate(choices):
+                        if not c: continue  # The other side is waiting for this decision.
                         reply=call(cmd='choose',id=identifier,side=f'p{s+1}',choice=c)
                         assert not any(reply.get('errors',{}).values()),reply
                         states.append(call(cmd='state',id=identifier))

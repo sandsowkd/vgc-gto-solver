@@ -67,9 +67,10 @@ and application are named `vgc-gto-solver`.
 
 ## Supported input
 
-Supply JSON with exactly one source: `teams`, `packed_teams`, or `projection`. Each team contains
-one or two mons; no bench or voluntary switching is implemented. The two active Pokémon are
-optimized as one joint action, including targeting and Mega choices.
+Supply JSON with exactly one source: `teams`, `packed_teams`, or `projection`. Explicit or packed
+teams contain one to four Pokémon. The first two lead and any others start as reserves. Legal
+moves, switches, targets and Mega choices are optimized as joint actions. See the
+[four-on-four example](examples/four-v-four.json).
 
 ```json
 {
@@ -97,8 +98,10 @@ effects. Use `replay` for exact histories, including repeated Protect, two-turn 
 "replay": [["move 4, move 4", "move 4 mega, move 4"]]
 ```
 
-Each pair is a simultaneous request using Showdown choice syntax. Targets 1/2 are foes, -1/-2
-own slots, 0 automatic/spread/self as allowed by the engine. Use an empty string for a side without a pending forced request. Optional top-level `field` sets
+Each pair is an engine decision using Showdown choice syntax. Targets 1/2 are foes, -1/-2
+own slots, 0 automatic/spread/self as allowed by the engine. A `switch 3` sends in the third entry
+in the engine’s current roster order. Use an empty string for a waiting side. Replay into a replacement
+decision if a lead should start fainted with a living reserve. Optional top-level `field` sets
 `weather`, `weather_turns`, `terrain`, `terrain_turns`, `trick_room`; canonical IDs include
 `sunnyday`, `raindance`, `sandstorm`, `snow`, `electricterrain`. Optional `side_conditions` is a
 two-element array with `tailwind`, `reflect`, `light_screen`, `aurora_veil` durations. `turn` can
@@ -174,9 +177,9 @@ throughput, budget failures, intervals and playing-strength results. The initial
 
 ## Limitations and next work
 
-Only pinned Reg M-C, perfect information, one or two Pokémon per side, no reserves/voluntary
-switching. Ninjask owns battle mechanics; a matching seeded sample is not proof of universal
-correctness or official-game parity. Tactical policies are early heuristics. Large all-pair
+The solver uses pinned Reg M-C, perfect information, and up to four Pokémon per side. Ninjask owns
+battle mechanics. Seeded comparisons cover specific Showdown traces. Tactical policies are early
+heuristics with limited switch strategy. Large all-pair
 matrices are sample-hungry: 32 samples/cell gave unstable strategies and wide statistical bounds
 despite an estimated matrix gap near 0.001. No learned values, depth search or hidden-set modeling is included. The browser is a research
 interface; arbitrary replay-state edits require returning to setup.

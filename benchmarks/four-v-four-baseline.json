@@ -1,0 +1,290 @@
+{
+  "scope": "One illustrative full-information four-on-four Reg M-C position assembled from existing examples.",
+  "strategy_evaluation": {
+    "schema_version": 1,
+    "status": "complete",
+    "created_utc": "2026-11-28T16:18:23.690770+00:00",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "profile": "quick",
+    "gap_target": 0.05,
+    "candidate_binary_sha256": "dc34606ea74bf2c16940980b9e76df8ac5aa00943bd3f1960bf1e0bdfef7e848",
+    "reference_binary_sha256": "dc34606ea74bf2c16940980b9e76df8ac5aa00943bd3f1960bf1e0bdfef7e848",
+    "fixtures": [
+      {
+        "fixture": "examples/four-v-four.json",
+        "sha256": "653061e069915187fafe14eac9d51d315187c1799a12dfb4c28224351a5b7c2f",
+        "reference": {
+          "config": {
+            "sampling": {
+              "samples_per_cell": 64,
+              "max_turns": 256,
+              "seed": 810271,
+              "threads": 3,
+              "policies": [
+                "greedy",
+                "greedy"
+              ],
+              "confidence": 0.95
+            },
+            "solver": {
+              "iterations": 50000,
+              "tolerance": 0.001,
+              "algorithm": "regret_matching_plus"
+            },
+            "budget_ms": null
+          },
+          "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+          "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+          "format": "gen9championsvgc2026regmc",
+          "shape": [
+            94,
+            98
+          ],
+          "samples": 589568,
+          "coverage_complete": true,
+          "truncations": 0,
+          "requested_samples_complete": true,
+          "cancelled_for_budget": 0,
+          "elapsed_ms": 94085.72657399782,
+          "runtime": {
+            "initialization_ms": 26.209635,
+            "enumeration_ms": 0.10371599999999999,
+            "payoff_estimation_ms": 93871.652191,
+            "regret_minimization_ms": 113.36671299999999,
+            "total_ms": 94011.425234
+          },
+          "matrix_gap": 0.0009824086850401814,
+          "result_sha256": "7faf441abe2dabec6467c2368dbe7e610561c54aadad3e91ddc97cf13eedbac9"
+        },
+        "candidates": [
+          {
+            "run": {
+              "config": {
+                "sampling": {
+                  "samples_per_cell": 8,
+                  "max_turns": 256,
+                  "seed": 11,
+                  "threads": 3,
+                  "policies": [
+                    "greedy",
+                    "greedy"
+                  ],
+                  "confidence": 0.95
+                },
+                "solver": {
+                  "iterations": 50000,
+                  "tolerance": 0.001,
+                  "algorithm": "regret_matching_plus"
+                },
+                "budget_ms": null
+              },
+              "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+              "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+              "format": "gen9championsvgc2026regmc",
+              "shape": [
+                94,
+                98
+              ],
+              "samples": 73696,
+              "coverage_complete": true,
+              "truncations": 0,
+              "requested_samples_complete": true,
+              "cancelled_for_budget": 0,
+              "elapsed_ms": 11025.713703002111,
+              "runtime": {
+                "initialization_ms": 24.464568,
+                "enumeration_ms": 0.100332,
+                "payoff_estimation_ms": 10848.283591,
+                "regret_minimization_ms": 65.870046,
+                "total_ms": 10938.795371999999
+              },
+              "matrix_gap": 0.0009994264421189225,
+              "result_sha256": "a4f243a240f977e90bc395241c7805116dec427c6e9d8ab852983d0fef90dea9"
+            },
+            "reference_score": {
+              "status": "scored",
+              "utility": 0.8819094597403146,
+              "utility_interval": [
+                0.4688711717365691,
+                0.9998342689751266
+              ],
+              "player1_deviation_gain": 0.0823851134719682,
+              "player2_deviation_gain": 0.08992849615906617,
+              "gap": 0.17231360963103437,
+              "gap_interval": [
+                0,
+                0.6211146408169699
+              ],
+              "meets_target": false
+            }
+          },
+          {
+            "run": {
+              "config": {
+                "sampling": {
+                  "samples_per_cell": 8,
+                  "max_turns": 256,
+                  "seed": 29,
+                  "threads": 3,
+                  "policies": [
+                    "greedy",
+                    "greedy"
+                  ],
+                  "confidence": 0.95
+                },
+                "solver": {
+                  "iterations": 50000,
+                  "tolerance": 0.001,
+                  "algorithm": "regret_matching_plus"
+                },
+                "budget_ms": null
+              },
+              "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+              "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+              "format": "gen9championsvgc2026regmc",
+              "shape": [
+                94,
+                98
+              ],
+              "samples": 73696,
+              "coverage_complete": true,
+              "truncations": 0,
+              "requested_samples_complete": true,
+              "cancelled_for_budget": 0,
+              "elapsed_ms": 13277.867819000676,
+              "runtime": {
+                "initialization_ms": 29.07701,
+                "enumeration_ms": 0.11537399999999999,
+                "payoff_estimation_ms": 13044.750699,
+                "regret_minimization_ms": 103.161901,
+                "total_ms": 13177.210912999999
+              },
+              "matrix_gap": 0.000997873986000819,
+              "result_sha256": "a64651d6cff33eaa1d45678c75dc6726872b97c0bd5b12864da9fe4161f46ce3"
+            },
+            "reference_score": {
+              "status": "scored",
+              "utility": 0.8683459060148613,
+              "utility_interval": [
+                0.4554177259532946,
+                0.9988574918614197
+              ],
+              "player1_deviation_gain": 0.05178677691063893,
+              "player2_deviation_gain": 0.06661192811905337,
+              "gap": 0.1183987050296923,
+              "gap_interval": [
+                0,
+                0.6113530296365275
+              ],
+              "meets_target": false
+            }
+          }
+        ]
+      }
+    ],
+    "correctness_checks": "passed",
+    "all_gap_targets_met": false
+  },
+  "showdown_reference": {
+    "simulator_commit": "8a59175f3915771285cd16fce5d7f788610ff242",
+    "showdown_commit": "3a766f2cfb5e51c1e428cfe87d0dba91a8f01640",
+    "games": 8,
+    "compared_states": 146,
+    "records": [
+      {
+        "fixture": 0,
+        "seed": 0,
+        "turns": 7,
+        "states": 15,
+        "ended": true
+      },
+      {
+        "fixture": 0,
+        "seed": 1,
+        "turns": 6,
+        "states": 13,
+        "ended": true
+      },
+      {
+        "fixture": 1,
+        "seed": 0,
+        "turns": 6,
+        "states": 13,
+        "ended": true
+      },
+      {
+        "fixture": 1,
+        "seed": 1,
+        "turns": 7,
+        "states": 15,
+        "ended": true
+      },
+      {
+        "fixture": 2,
+        "seed": 0,
+        "turns": 10,
+        "states": 21,
+        "ended": true
+      },
+      {
+        "fixture": 2,
+        "seed": 1,
+        "turns": 7,
+        "states": 15,
+        "ended": true
+      },
+      {
+        "fixture": 3,
+        "seed": 0,
+        "turns": 13,
+        "states": 25,
+        "ended": true
+      },
+      {
+        "fixture": 3,
+        "seed": 1,
+        "turns": 15,
+        "states": 29,
+        "ended": true
+      }
+    ]
+  },
+  "paired_matches": [
+    {
+      "policy_a": "tactical",
+      "policy_b": "greedy",
+      "solver_samples_per_cell": 8,
+      "seed": 20261128,
+      "side_swapped_pairs": 200,
+      "games": 400,
+      "wins": 203,
+      "losses": 197,
+      "draws": 0,
+      "truncated": 0,
+      "utility": 0.5075,
+      "paired_utility_interval_95": [
+        0.41146772086800787,
+        0.603532279131992
+      ],
+      "runtime_ms": 145.518065
+    },
+    {
+      "policy_a": "tactical",
+      "policy_b": "random",
+      "solver_samples_per_cell": 8,
+      "seed": 20261128,
+      "side_swapped_pairs": 200,
+      "games": 400,
+      "wins": 396,
+      "losses": 4,
+      "draws": 0,
+      "truncated": 0,
+      "utility": 0.99,
+      "paired_utility_interval_95": [
+        0.8939677208680079,
+        1.0
+      ],
+      "runtime_ms": 107.653399
+    }
+  ]
+}

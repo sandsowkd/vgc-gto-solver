@@ -235,10 +235,8 @@ fn unsupported_and_malformed_inputs_rejected() {
     p.teams.as_mut().unwrap()[0][0].hp = Some(60000);
     assert!(p.build().is_err());
     let mut p = small();
-    let extra = p.teams.as_ref().unwrap()[0][0].clone();
-    p.teams.as_mut().unwrap()[0].push(extra);
-    let extra = p.teams.as_ref().unwrap()[0][0].clone();
-    p.teams.as_mut().unwrap()[0].push(extra);
+    let team = &mut p.teams.as_mut().unwrap()[0];
+    team.resize(5, team[0].clone());
     assert!(p.build().is_err());
 }
 

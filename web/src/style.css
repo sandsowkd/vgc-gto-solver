@@ -413,8 +413,79 @@ main {
 }
 .team-cards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  min-width: 0;
   gap: 10px;
+}
+.reserves {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+.reserves h3 {
+  margin: 0 0 5px;
+  font:
+    11px 'IBM Plex Mono',
+    monospace;
+  color: #a9b5c5;
+}
+.reserve-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 130px), 1fr));
+  gap: 5px;
+}
+.reserve {
+  min-width: 0;
+  padding: 5px;
+  background: #171f29;
+  border: 1px solid #353e4b;
+  border-radius: 4px;
+}
+.reserve-set {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  gap: 2px;
+  padding: 4px 5px;
+  border: 0;
+  background: transparent;
+}
+.reserve-set:disabled {
+  opacity: 1;
+}
+.reserve-set small,
+.reserve-details small {
+  color: #a9b5c5;
+}
+.reserve-details summary {
+  padding: 4px 5px;
+  cursor: pointer;
+}
+.reserve-details summary small {
+  display: block;
+  padding-left: 12px;
+}
+.reserve-details ul {
+  margin: 4px 0 0;
+  padding-left: 17px;
+  font-size: 11px;
+}
+.reserve-leads {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-top: 3px;
+}
+.reserve-leads button,
+.add-reserve {
+  font-size: 11px;
+}
+.add-reserve {
+  min-height: 34px;
+  align-self: start;
 }
 .pokemon-card {
   display: flex;
@@ -1689,6 +1760,15 @@ main {
 .turn-controls input {
   height: 35px;
   font-size: 11px;
+}
+.slot-choices {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+.turn-waiting {
+  align-self: center;
+  font-size: 12px;
 }
 .advance-button {
   height: 35px;

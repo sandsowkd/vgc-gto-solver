@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { test, expect, type Page } from '@playwright/test';
 async function ready(page: Page) {
   await page.goto('/');
@@ -17,6 +19,72 @@ async function picker(page: Page, label: string, value: string) {
     .first()
     .click();
 }
+test('four brought Pokémon switch, replace a knockout and replay on a phone', async ({ page }) => {
+  const fixture = resolve(
+    process.env.VGC_SOLVER_ROOT ?? process.cwd(),
+    'examples/four-v-four.json',
+  );
+  const position = JSON.parse(readFileSync(fixture, 'utf8'));
+  position.teams[0][1].hp = 1;
+  position.teams[0][1].item = null;
+  position.teams[0].pop();
+  await page.addInitScript((position) => {
+    if (!localStorage.getItem('vgc-gto-solver.workspace.v2')) {
+      localStorage.setItem(
+        'vgc-gto-solver.workspace.v2',
+        JSON.stringify({ position, history: [] }),
+      );
+    }
+  }, position);
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ready(page);
+  await page.getByRole('button', { name: 'Add Player 1 reserve' }).click();
+  await picker(page, 'Species', 'Clefable');
+  await page.getByRole('button', { name: 'Apply changes' }).click();
+  await expect(page.getByRole('button', { name: 'Edit Player 1 reserve Clefable' })).toBeVisible();
+  await page.getByRole('button', { name: 'Make Player 1 Charizard lead A' }).click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Player 1 Charizard', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Make Player 1 Garchomp lead A' }).click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Player 1 Garchomp', exact: true }),
+  ).toBeVisible();
+
+  await page.getByLabel('Turn RNG seed').fill('17');
+  await page.getByLabel('Player 1 slot A action').selectOption('switch 3');
+  const partner = page.getByLabel('Player 1 slot B action');
+  await expect(partner.getByRole('option', { name: /→ Charizard/ })).toHaveCount(0);
+  await partner.selectOption('switch 3, move 1 1');
+  await page.getByLabel('Player 2 slot A action').selectOption('move 4');
+  await page.getByLabel('Player 2 slot B action').selectOption('move 4, move 1 2');
+  await page.getByRole('button', { name: 'Advance', exact: true }).click();
+
+  await expect(page.getByText('Player 2 · Waiting', { exact: true })).toBeVisible();
+  await page.getByLabel('Inspect Player 1 reserve Garchomp').click();
+  await expect(page.getByText(/Dragon Claw · \d+\/\d+ PP/)).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Edit Player 1 Charizard', exact: true }),
+  ).toBeVisible();
+  await solve(page);
+  await expect(page.getByRole('heading', { name: 'Strategy solution' })).toBeVisible();
+  await page.getByLabel('Player 1 slot B action').selectOption('pass, switch 4');
+  await page.getByRole('button', { name: 'Send replacements' }).click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Player 1 Clefable', exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Undo', exact: true }).click();
+  await expect(page.getByRole('button', { name: 'Send replacements' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByText('Player 2 · Waiting', { exact: true })).toBeVisible();
+  await page.getByLabel('Player 1 slot B action').selectOption('pass, switch 4');
+  await page.getByRole('button', { name: 'Send replacements' }).click();
+  await expect(
+    page.getByRole('button', { name: 'Edit Player 1 Clefable', exact: true }),
+  ).toBeVisible();
+  await solve(page);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(390);
+});
 test('edit all four Pokémon, import six sets, configure field, solve, inspect and replay', async ({
   page,
   request,

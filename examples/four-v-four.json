@@ -1,0 +1,169 @@
+{
+  "teams": [
+    [
+      {
+        "species": "Garchomp",
+        "ability": "Rough Skin",
+        "moves": [
+          "Dragon Claw",
+          "Earthquake",
+          "Rock Slide",
+          "Protect"
+        ],
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "points": [
+          2,
+          32,
+          0,
+          0,
+          0,
+          32
+        ]
+      },
+      {
+        "species": "Rotom-Wash",
+        "ability": "Levitate",
+        "moves": [
+          "Thunderbolt",
+          "Hydro Pump",
+          "Will-O-Wisp",
+          "Protect"
+        ],
+        "item": "Sitrus Berry",
+        "nature": "Modest",
+        "points": [
+          32,
+          0,
+          2,
+          32,
+          0,
+          0
+        ]
+      },
+      {
+        "species": "Charizard",
+        "ability": "Blaze",
+        "moves": [
+          "Heat Wave",
+          "Air Slash",
+          "Solar Beam",
+          "Protect"
+        ],
+        "item": "Charizardite Y",
+        "nature": "Timid",
+        "points": [
+          2,
+          0,
+          0,
+          32,
+          0,
+          32
+        ]
+      },
+      {
+        "species": "Clefable",
+        "ability": "Unaware",
+        "moves": [
+          "Moonblast",
+          "Follow Me",
+          "Helping Hand",
+          "Protect"
+        ],
+        "item": "Rocky Helmet",
+        "nature": "Relaxed",
+        "points": [
+          32,
+          0,
+          32,
+          0,
+          2,
+          0
+        ]
+      }
+    ],
+    [
+      {
+        "species": "Tyranitar",
+        "ability": "Sand Stream",
+        "moves": [
+          "Rock Slide",
+          "Crunch",
+          "Low Kick",
+          "Protect"
+        ],
+        "item": "Chople Berry",
+        "nature": "Adamant",
+        "points": [
+          32,
+          32,
+          0,
+          0,
+          2,
+          0
+        ]
+      },
+      {
+        "species": "Excadrill",
+        "ability": "Sand Rush",
+        "moves": [
+          "Iron Head",
+          "High Horsepower",
+          "Rock Slide",
+          "Protect"
+        ],
+        "item": "Focus Sash",
+        "nature": "Jolly",
+        "points": [
+          2,
+          32,
+          0,
+          0,
+          0,
+          32
+        ]
+      },
+      {
+        "species": "Gardevoir",
+        "ability": "Trace",
+        "moves": [
+          "Hyper Voice",
+          "Psychic",
+          "Helping Hand",
+          "Protect"
+        ],
+        "item": "Gardevoirite",
+        "nature": "Modest",
+        "points": [
+          32,
+          0,
+          0,
+          32,
+          2,
+          0
+        ]
+      },
+      {
+        "species": "Incineroar",
+        "ability": "Intimidate",
+        "moves": [
+          "Fake Out",
+          "Flare Blitz",
+          "Darkest Lariat",
+          "Helping Hand"
+        ],
+        "item": "Sitrus Berry",
+        "nature": "Careful",
+        "points": [
+          32,
+          2,
+          0,
+          0,
+          32,
+          0
+        ]
+      }
+    ]
+  ],
+  "seed": 17
+}

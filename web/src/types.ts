@@ -89,6 +89,7 @@ export type Action = { index: number; choice: string; description: string[] };
 export type MonView = {
   name: string;
   species: string;
+  roster_species: string;
   hp: number;
   maxhp: number;
   types: string[];
@@ -103,10 +104,12 @@ export type MonView = {
 export type Inspection = {
   state: {
     turn: number;
+    requestState: 'move' | 'switch' | null;
     field: Record<string, unknown>;
     sides: { pokemon: MonView[]; sideConditions?: Record<string, unknown> }[];
   };
   actions: [Action[], Action[]];
+  needs_choice: [boolean, boolean];
   events: string[];
   ended: boolean;
   winner: number | null;

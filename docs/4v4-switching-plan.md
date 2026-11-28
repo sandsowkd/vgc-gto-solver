@@ -1,5 +1,7 @@
 # 4v4 doubles with switching
 
+The first playable milestone is implemented. See [progress](../PROGRESS.md#playable-4v4-and-its-first-benchmark) for the current results and remaining research.
+
 ## What a player can do
 
 Keep the existing endgame editor and add optional reserves to each side. The first release lets a player bring up to four Pokémon, choose the two starting leads, and leave reserve slots empty for smaller positions. A six-Pokémon import lets the player mark four to bring and two to lead. Automatic bring-four and lead selection can follow once the in-battle solver has been measured.
@@ -12,7 +14,7 @@ When a knockout or a pivot move requires a replacement, show a separate **Choose
 
 ## Engine and replay
 
-The pinned Ninjask engine already enumerates switches in `Battle::joint_choices`. In a local engine probe with four Pokémon per side, it allowed a double switch to distinct reserves, excluded using the same reserve twice, and allowed the switched-out pair to come back. The app currently caps the roster at two in `src/battle.rs` and filters voluntary switches in `src/actions.rs`. Its switch descriptions also omit the incoming Pokémon, and `src/policy.rs` gives non-move choices empty features.
+The pinned Ninjask engine enumerates switches in `Battle::joint_choices`. A local engine probe verified double switches to distinct reserves, rejection of a duplicate destination, and switching the original pair back in. The app now exposes those choices in `src/actions.rs`. The current continuation policies still give non-move choices empty features.
 
 1. Accept one to four brought Pokémon, validate species and item clauses across the entire roster, and encode starting lead order. Preserve the meaning of existing two-Pokémon saves, share links, CLI fixtures, and replay strings. Start with native explicit teams and replay. Expand advanced projection inputs only after a round-trip validator exists for the new states.
 2. Treat roster identity, active slot, and engine team index as separate values. Ninjask swaps team entries when a Pokémon switches, so the frontend must read each slot’s current occupant from the server. Maintain a stable roster identity from initial slots across Mega Evolution, form changes, and replay. Use the engine’s canonical choice at the current step for submission and record the choice and seed for deterministic replay. Never interpret an old `switch 3` against a different board.

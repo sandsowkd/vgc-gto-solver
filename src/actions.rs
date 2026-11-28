@@ -1,5 +1,8 @@
 //! Enumerate complete joint choices using the simulator's true legality.
-use ninjask::{Battle, state::SlotChoice};
+use ninjask::{
+    Battle,
+    state::{RequestState, SlotChoice},
+};
 use serde::Serialize;
 
 pub type JointAction = Vec<SlotChoice>;
@@ -12,13 +15,15 @@ pub struct ActionDescription {
 }
 
 pub fn legal(b: &Battle, side: usize) -> Vec<JointAction> {
-    b.joint_choices(side)
-        .into_iter()
-        .filter(|a| {
-            b.request != ninjask::state::RequestState::Move
-                || !a.iter().any(|c| matches!(c, SlotChoice::Switch { .. }))
-        })
-        .collect()
+    if !matches!(b.request, RequestState::Move | RequestState::Switch) {
+        return Vec::new();
+    }
+    if b.side_needs_choice(side) {
+        b.joint_choices(side)
+    } else {
+        // A waiting player has one no-op row or column in the root matrix.
+        vec![Vec::new()]
+    }
 }
 
 pub fn describe(b: &Battle, side: usize, actions: &[JointAction]) -> Vec<ActionDescription> {
@@ -28,29 +33,43 @@ pub fn describe(b: &Battle, side: usize, actions: &[JointAction]) -> Vec<ActionD
         .map(|(index, a)| ActionDescription {
             index,
             choice: b.choice_string(a),
-            description: a
-                .iter()
-                .enumerate()
-                .map(|(i, c)| match c {
-                    SlotChoice::Pass => "pass (empty or fainted slot)".into(),
-                    SlotChoice::Switch { .. } => "switch".into(),
-                    SlotChoice::Move { slot, target, mega } => {
-                        let m = &b.sides[side].mons[i];
-                        let name = m
-                            .moves
-                            .get(*slot)
-                            .map(|s| b.dex.mv(s.id).name.as_str())
-                            .unwrap_or("forced move / Struggle");
-                        format!(
-                            "{}: {}{} (target {})",
-                            m.name,
-                            name,
-                            if *mega { " + Mega Evolution" } else { "" },
-                            target
-                        )
-                    }
-                })
-                .collect(),
+            description: if a.is_empty() {
+                vec!["Waiting".into()]
+            } else {
+                a.iter()
+                    .enumerate()
+                    .map(|(i, c)| match c {
+                        SlotChoice::Pass => "pass (empty or fainted slot)".into(),
+                        SlotChoice::Switch { index } => {
+                            let team = &b.sides[side];
+                            let incoming = b.dex.species(team.mons[*index].species).name.as_str();
+                            if team.revival[i] {
+                                format!("Revive {incoming}")
+                            } else if let Some(outgoing) = team.mons.get(i) {
+                                let name = &b.dex.species(outgoing.species).name;
+                                format!("Switch {name} → {incoming}")
+                            } else {
+                                format!("Send in {incoming}")
+                            }
+                        }
+                        SlotChoice::Move { slot, target, mega } => {
+                            let m = &b.sides[side].mons[i];
+                            let name = m
+                                .moves
+                                .get(*slot)
+                                .map(|s| b.dex.mv(s.id).name.as_str())
+                                .unwrap_or("forced move / Struggle");
+                            format!(
+                                "{}: {}{} (target {})",
+                                m.name,
+                                name,
+                                if *mega { " + Mega Evolution" } else { "" },
+                                target
+                            )
+                        }
+                    })
+                    .collect()
+            },
         })
         .collect()
 }

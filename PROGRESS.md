@@ -77,6 +77,23 @@ verified matching fixed-work digests at one and four threads and marked a 1 ms i
 unresolved. Raw JSON and the paired policy comparison are retained in `.cache/strategy-eval.*`
 and `.cache/strategy-match.*` in the development environment.
 
-The next app milestone is end-to-end 4v4 play with legal switches and replay, then extending the
-benchmark to frozen switch and replacement positions. A recurring 40-minute evaluation needs a
-persistent Codex scheduling capability, which this task does not expose.
+## Playable 4v4 and its first benchmark
+
+The app now accepts up to four brought Pokémon per side. You can edit the reserves, change
+leads, choose simultaneous moves and switches, and replay or undo replacement decisions. A
+waiting player has one no-op action in the solve. The editor still supports no-reserve endgames.
+
+- All 30 Rust tests and both builds passed. The phone-width test covers adding a reserve,
+  editing leads, rejecting incompatible partner actions, switching, replacing a knockout,
+  undoing, reloading and solving. A native test covers a pivot with actions still in the queue.
+- Showdown agreed on 146 states over eight seeded games, including 54 states in the two 4v4 games.
+- The [4v4 baseline](benchmarks/four-v-four-baseline.json) completed 736,960 rollouts across
+  9,212 possible root action pairs. On fresh reference samples the two candidate gaps were 0.118
+  and 0.172. Neither met the 0.05 upper-bound target. This is one illustrative position. The
+  paired match gave the tactical baseline 0.508 utility against greedy with a 95% interval of
+  0.411–0.604, so it does not establish a stronger follow-up policy.
+
+Next, add a frozen corpus of switching and replacement positions and compare a switch-aware
+continuation policy to the current baselines at equal compute. The session has no persistent
+40-minute scheduling tool. Live deployment remains blocked by missing hosting access and an
+egress denial to `jeremyhua.ng`.

@@ -116,7 +116,14 @@ fn apply_step(b: &mut Battle, step: &Step) -> crate::Result<()> {
 }
 fn view(b: &Battle) -> Value {
     let a = [actions::legal(b, 0), actions::legal(b, 1)];
-    json!({"state":b.projection(),"actions":[actions::describe(b,0,&a[0]),actions::describe(b,1,&a[1])],"events":b.log.iter().map(|l|l.render(Viewer::Omniscient)).collect::<Vec<_>>(),"ended":b.ended,"winner":b.winner})
+    let mut state = b.projection();
+    for (side, team) in b.sides.iter().enumerate() {
+        for (index, mon) in team.mons.iter().enumerate() {
+            state["sides"][side]["pokemon"][index]["roster_species"] =
+                json!(b.dex.species(mon.set_species).name);
+        }
+    }
+    json!({"state":state,"actions":[actions::describe(b,0,&a[0]),actions::describe(b,1,&a[1])],"needs_choice":[b.side_needs_choice(0),b.side_needs_choice(1)],"events":b.log.iter().map(|l|l.render(Viewer::Omniscient)).collect::<Vec<_>>(),"ended":b.ended,"winner":b.winner})
 }
 #[derive(Default)]
 struct Job {
@@ -515,6 +522,99 @@ mod tests {
         assert!(!a.log.is_empty());
         b.history.clear();
         assert_eq!(before, b.build().unwrap().projection());
+    }
+    #[test]
+    fn four_on_four_replays_a_switch_and_a_knockout_replacement() {
+        let mut b = Board {
+            position: serde_json::from_str(include_str!("../examples/four-v-four.json")).unwrap(),
+            history: Vec::new(),
+        };
+        let threatened = &mut b.position.teams.as_mut().unwrap()[0][1];
+        threatened.hp = Some(1);
+        threatened.item = None;
+        let root = b.build().unwrap();
+        let legal = actions::legal(&root, 0);
+        assert!(
+            legal
+                .iter()
+                .any(|a| root.choice_string(a) == "switch 3, switch 4")
+        );
+        assert!(
+            !legal
+                .iter()
+                .any(|a| root.choice_string(a) == "switch 3, switch 3")
+        );
+        b.history.push(Step {
+            choices: ["switch 3, move 1 1".into(), "move 4, move 1 2".into()],
+            seed: 17,
+        });
+        let replacing = b.build().unwrap();
+        let state = view(&replacing);
+        assert_eq!(
+            state["state"]["requestState"], "switch",
+            "{}",
+            state["events"]
+        );
+        assert_eq!(state["needs_choice"], json!([true, false]));
+        assert_eq!(
+            state["state"]["sides"][0]["pokemon"][0]["species"],
+            "Charizard"
+        );
+        assert_eq!(
+            state["state"]["sides"][0]["pokemon"][2]["roster_species"],
+            "Garchomp"
+        );
+        assert_eq!(state["actions"][1][0]["choice"], "");
+        let mut config = SearchConfig::default();
+        config.sampling.samples_per_cell = 1;
+        let solved = search::solve_battle(&replacing, &config, Instant::now(), None).unwrap();
+        assert_eq!((solved.matrix.rows, solved.matrix.columns), (2, 1));
+        assert!(solved.solution.is_some());
+
+        let step = Step {
+            choices: ["pass, switch 4".into(), String::new()],
+            seed: 42,
+        };
+        b.history.push(step.clone());
+        let after = b.build().unwrap();
+        assert_eq!(
+            view(&after)["state"]["sides"][0]["pokemon"][1]["species"],
+            "Clefable"
+        );
+        b.history.pop();
+        assert_eq!(view(&b.build().unwrap()), state);
+        b.history.push(step);
+        assert_eq!(view(&b.build().unwrap()), view(&after));
+    }
+    #[test]
+    fn replacement_after_pivot_resumes_the_queued_turn() {
+        let mut b = Board {
+            position: serde_json::from_str(include_str!("../examples/four-v-four.json")).unwrap(),
+            history: Vec::new(),
+        };
+        b.position.teams.as_mut().unwrap()[0][1].moves[0] = "Volt Switch".into();
+        b.history.push(Step {
+            choices: ["move 4, move 1 1".into(), "move 1, move 4".into()],
+            seed: 17,
+        });
+        let pivot = b.build().unwrap();
+        assert_eq!(pivot.request, ninjask::state::RequestState::Switch);
+        assert_eq!(pivot.turn, 1);
+        assert!(!pivot.queue.is_empty());
+        crate::battle::validate_boundary(&pivot).unwrap();
+        b.history.push(Step {
+            choices: ["pass, switch 4".into(), String::new()],
+            seed: 42,
+        });
+        let after = b.build().unwrap();
+        assert_eq!(after.turn, 2);
+        assert_eq!(after.request, ninjask::state::RequestState::Move);
+        assert!(
+            after
+                .log
+                .iter()
+                .any(|l| l.render(Viewer::Omniscient).contains("Rock Slide"))
+        );
     }
     #[test]
     fn all_bundled_presets_validate_with_native_stats() {

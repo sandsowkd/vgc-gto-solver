@@ -37,8 +37,9 @@ a point solution when the full point payoff matrix is unavailable.
 Full information is intentional. A policy must never read the opponent's pending choice.
 Both choices must be computed from the same pre-submission battle state.
 Do not independently optimize the two active Pokémon. Preserve engine joint constraints.
-No reserves, voluntary switching, hidden-information search or learned evaluation yet.
-Forced requests such as Revival Blessing remain delegated to the engine, restricted to the two-mon roster.
+Teams may bring up to four, with the first two entries leading. Delegate voluntary switches,
+replacement and revival requests to the engine. Hidden-information search and learned evaluation
+are future work.
 
 Prefer source inspection and tiny differential experiments to reimplementing simulator mechanics.
 Preserve entry ability effects when an override is omitted. Hand-authored projections are advanced

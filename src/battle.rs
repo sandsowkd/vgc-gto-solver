@@ -1,4 +1,4 @@
-//! Validated no-reserve input and decision-boundary battle construction.
+//! Validated team input and decision-boundary battle construction.
 use crate::{Result, data};
 use ninjask::{
     Battle,
@@ -77,7 +77,7 @@ pub struct SideConditions {
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[serde(deny_unknown_fields)]
 pub struct Position {
-    /// Exactly one of teams, packed_teams or projection must be supplied.
+    /// Exactly one input must be supplied. On each team, the first two sets lead.
     #[serde(default)]
     pub teams: Option<[Vec<Pokemon>; 2]>,
     #[serde(default)]
@@ -238,10 +238,8 @@ impl Position {
                 }
                 [parse_packed(&dex, &t[0])?, parse_packed(&dex, &t[1])?]
             };
-            if sets.iter().any(|t| t.is_empty() || t.len() > 2) {
-                return Err(
-                    "each side must contain 1 or 2 Pokémon; reserves are unsupported".into(),
-                );
+            if sets.iter().any(|t| t.is_empty() || t.len() > 4) {
+                return Err("each side must contain 1–4 Pokémon".into());
             }
             for team in &sets {
                 for mon in team {
@@ -304,6 +302,11 @@ impl Position {
                     }
                     b.sides[s].pokemon_left = b.sides[s].mons.iter().filter(|m| !m.fainted).count();
                     b.sides[s].total_fainted = (teams[s].len() - b.sides[s].pokemon_left) as u8;
+                    let side = &b.sides[s];
+                    let (leads, reserves) = side.mons.split_at(side.n_active.min(side.mons.len()));
+                    if leads.iter().any(|m| m.fainted) && reserves.iter().any(|m| !m.fainted) {
+                        return Err("Choose living leads when reserves are available, or replay into a forced replacement".into());
+                    }
                 }
             }
             b
@@ -522,16 +525,12 @@ pub fn validate_boundary(b: &Battle) -> Result<()> {
     if b.ended || b.sides.iter().any(|s| s.pokemon_left == 0) {
         return Err("position is terminal; supply a nonterminal decision".into());
     }
-    if b.request != RequestState::Move
-        || !b.queue.is_empty()
+    if !matches!(b.request, RequestState::Move | RequestState::Switch)
+        || (b.request == RequestState::Move && !b.queue.is_empty())
         || b.sides.iter().any(|s| s.choice.is_some())
+        || !(b.side_needs_choice(0) || b.side_needs_choice(1))
     {
-        return Err(
-            "only simultaneous move boundaries with no pending choices are supported".into(),
-        );
-    }
-    if b.sides.iter().any(|s| s.mons.len() > 2) {
-        return Err("reserves are unsupported".into());
+        return Err("expected a move or replacement decision with no submitted choices".into());
     }
     Ok(())
 }

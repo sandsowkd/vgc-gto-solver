@@ -31,6 +31,7 @@ import { api } from './api';
 import {
   clone,
   id,
+  type Action,
   type Board,
   type Catalog,
   type Config,
@@ -101,7 +102,7 @@ function loadInitial(cat: Catalog): Board {
     )
       return example(cat);
     for (const team of b.position.teams) {
-      if (!Array.isArray(team) || team.length > 2) return example(cat);
+      if (!Array.isArray(team) || team.length > 4) return example(cat);
       for (const p of team)
         if (
           !p ||
@@ -323,8 +324,9 @@ function ImportDialog({
         {roster.length > 0 && (
           <>
             <h3>
-              Select up to two active Pokémon <span>{chosen.length} / 2</span>
+              Select up to four Pokémon <span>{chosen.length} / 4</span>
             </h3>
+            <p className="muted">The first two selected lead. Change leads on the board.</p>
             <div className="roster">
               {roster.map((p, i) => (
                 <button
@@ -335,7 +337,7 @@ function ImportDialog({
                     setChosen(
                       chosen.includes(i)
                         ? chosen.filter((x) => x !== i)
-                        : chosen.length < 2
+                        : chosen.length < 4
                           ? [...chosen, i]
                           : chosen,
                     )
@@ -344,7 +346,10 @@ function ImportDialog({
                   <Sprite name={p.species} />
                   <span>
                     {p.species}
-                    <small>{p.item || 'No item'}</small>
+                    <small>
+                      {chosen.includes(i) && (chosen.indexOf(i) < 2 ? 'Lead · ' : 'Reserve · ')}
+                      {p.item || 'No item'}
+                    </small>
                   </span>
                   {chosen.includes(i) && <Check size={16} />}
                 </button>
@@ -494,6 +499,59 @@ function download(board: Board) {
   a.click();
   URL.revokeObjectURL(url);
 }
+function SlotChoices({
+  actions,
+  choice,
+  side,
+  onChange,
+}: {
+  actions: Action[];
+  choice: string;
+  side: number;
+  onChange: (choice: string) => void;
+}) {
+  const parts = actions.map((a) => ({ ...a, commands: a.choice.split(', ') }));
+  const selected = parts.find((a) => a.choice === choice) || parts[0];
+  const first = new Map(parts.map((a) => [a.commands[0], a.description[0]]));
+  const second = parts.filter((a) => a.commands[0] === selected?.commands[0]);
+  return (
+    <div className={'slot-choices p' + side}>
+      <label>
+        PLAYER {side + 1} · SLOT A
+        <select
+          aria-label={`Player ${side + 1} slot A action`}
+          value={selected?.commands[0] || ''}
+          onChange={(e) => {
+            const compatible = parts.filter((a) => a.commands[0] === e.target.value);
+            const next = compatible.find((a) => a.commands[1] === selected?.commands[1]);
+            onChange((next || compatible[0]).choice);
+          }}
+        >
+          {[...first].map(([command, label]) => (
+            <option key={command} value={command}>
+              {label}
+            </option>
+          ))}
+        </select>
+      </label>
+      <label>
+        PLAYER {side + 1} · SLOT B
+        <select
+          aria-label={`Player ${side + 1} slot B action`}
+          value={selected?.choice || ''}
+          onChange={(e) => onChange(e.target.value)}
+        >
+          {second.map((a) => (
+            <option key={a.choice} value={a.choice}>
+              {a.description[1]}
+            </option>
+          ))}
+        </select>
+      </label>
+    </div>
+  );
+}
+
 function Workspace({ cat }: { cat: Catalog }) {
   const [board, setBoard] = useState<Board>(() => loadInitial(cat)),
     [inspection, setInspection] = useState<Inspection | null>(null),
@@ -641,7 +699,18 @@ function Workspace({ cat }: { cat: Catalog }) {
     change(b);
     setEditor(null);
   }
+  function setLead(side: number, reserve: number, lead: number) {
+    const b = clone(board);
+    const team = b.position.teams[side];
+    [team[lead], team[reserve]] = [team[reserve], team[lead]];
+    change(b);
+  }
   const locked = board.history.length > 0;
+  const hasReserves = board.position.teams.some((team) => team.length > 2);
+  const replacement = inspection?.state.requestState === 'switch';
+  function setSideChoice(side: number, choice: string) {
+    setChoices((current) => (side === 0 ? [choice, current[1]] : [current[0], choice]));
+  }
   const names = inspection
     ? inspection.state.sides.map((s) => s.pokemon.map((p) => p.species))
     : board.position.teams.map((t) => t.map((p) => p.species));
@@ -685,15 +754,17 @@ function Workspace({ cat }: { cat: Catalog }) {
     change(b);
   }
   async function advance() {
+    const currentVersion = version.current;
     setAdvanceBusy(true);
     setError('');
     try {
       const step = { choices, seed: turnSeed };
       await api<Inspection>('advance', { board, step });
+      if (currentVersion !== version.current) return;
       const b = clone(board);
       b.history.push(step);
       change(b);
-      notify('Turn advanced by the native engine');
+      notify(replacement ? 'Replacement sent in' : 'Battle advanced');
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -742,7 +813,9 @@ function Workspace({ cat }: { cat: Catalog }) {
       <main>
         <div className="workspace-top">
           <div>
-            <div className="eyebrow">FULL INFORMATION · NO RESERVES</div>
+            <div className="eyebrow">
+              FULL INFORMATION · {hasReserves ? 'DOUBLES WITH RESERVES' : 'NO RESERVES'}
+            </div>
             <h1>
               Battle workspace{' '}
               <span>Turn {inspection?.state.turn || board.position.turn || 1}</span>
@@ -836,22 +909,102 @@ function Workspace({ cat }: { cat: Catalog }) {
             </div>
           </div>
           <div className="board-cards">
-            {[0, 1].map((side) => (
-              <div className={'team-cards team-' + side} key={side}>
-                {[0, 1].map((slot) => (
-                  <Card
-                    key={slot}
-                    p={board.position.teams[side][slot]}
-                    mon={inspection?.state.sides[side]?.pokemon[slot]}
-                    side={side}
-                    slot={slot}
-                    cat={cat}
-                    locked={locked}
-                    onEdit={() => setEditor([side, slot])}
-                  />
-                ))}
-              </div>
-            ))}
+            {board.position.teams.map((team, side) => {
+              const live = inspection?.state.sides[side]?.pokemon;
+              return (
+                <div className={'team-cards team-' + side} key={side}>
+                  {[0, 1].map((slot) => {
+                    const mon = live?.[slot];
+                    const set = mon
+                      ? team.find((p) => id(p.species) === id(mon.roster_species))
+                      : team[slot];
+                    return (
+                      <Card
+                        key={slot}
+                        p={set}
+                        mon={mon}
+                        side={side}
+                        slot={slot}
+                        cat={cat}
+                        locked={locked}
+                        onEdit={() => setEditor([side, slot])}
+                      />
+                    );
+                  })}
+                  {team.length >= 2 && (!locked || team.length > 2) && (
+                    <section className="reserves" aria-label={`Player ${side + 1} reserves`}>
+                      <h3>Reserves</h3>
+                      <div className="reserve-list">
+                        {team.slice(2).map((set, i) => {
+                          const mon = live?.[i + 2];
+                          const name = mon?.species || set.species;
+                          const condition = mon
+                            ? `${mon.hp} / ${mon.maxhp} HP${mon.hp === 0 ? ' · Fainted' : mon.status ? ` · ${mon.status.toUpperCase()}` : ''}`
+                            : 'Reserve';
+                          if (locked && mon) {
+                            return (
+                              <details className="reserve reserve-details" key={mon.roster_species}>
+                                <summary aria-label={`Inspect Player ${side + 1} reserve ${name}`}>
+                                  <strong>{name}</strong>
+                                  <small>{condition}</small>
+                                </summary>
+                                <small>{displayName(cat, 'items', mon.item)}</small>
+                                <ul>
+                                  {mon.moves.map((move) => (
+                                    <li key={move.id}>
+                                      {displayName(cat, 'moves', move.id)} · {move.pp}/{move.maxpp}{' '}
+                                      PP
+                                    </li>
+                                  ))}
+                                </ul>
+                              </details>
+                            );
+                          }
+                          return (
+                            <div className="reserve" key={i}>
+                              <button
+                                type="button"
+                                className="reserve-set"
+                                disabled={locked}
+                                aria-label={`Edit Player ${side + 1} reserve ${name}`}
+                                onClick={() => setEditor([side, i + 2])}
+                              >
+                                <strong>{name}</strong>
+                                <small>{condition}</small>
+                              </button>
+                              {!locked && (
+                                <div className="reserve-leads">
+                                  {[0, 1].map((lead) => (
+                                    <button
+                                      type="button"
+                                      key={lead}
+                                      aria-label={`Make Player ${side + 1} ${name} lead ${lead === 0 ? 'A' : 'B'}`}
+                                      onClick={() => setLead(side, i + 2, lead)}
+                                    >
+                                      Lead {lead === 0 ? 'A' : 'B'}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                        {!locked && team.length < 4 && (
+                          <button
+                            type="button"
+                            className="add-reserve"
+                            aria-label={`Add Player ${side + 1} reserve`}
+                            onClick={() => setEditor([side, team.length])}
+                          >
+                            <Plus size={14} /> Add reserve
+                          </button>
+                        )}
+                      </div>
+                    </section>
+                  )}
+                </div>
+              );
+            })}
             <div className="versus">
               <Swords size={17} />
             </div>
@@ -1272,7 +1425,10 @@ function Workspace({ cat }: { cat: Catalog }) {
                 Turn explorer <span>Native simulation</span>
               </h2>
               <p>
-                Choose both sides’ actions before advancing. Undo replays the same seeded history.
+                {replacement
+                  ? 'Choose a replacement for each requested slot.'
+                  : 'Choose both sides’ actions before advancing.'}{' '}
+                Undo replays the same seeded history.
               </p>
             </div>
             <div className="inline">
@@ -1309,27 +1465,38 @@ function Workspace({ cat }: { cat: Catalog }) {
             </div>
           ) : (
             <div className="turn-controls">
-              {[0, 1].map((side) => (
-                <label key={side} className={'p' + side}>
-                  PLAYER {side + 1} JOINT ACTION
-                  <select
-                    aria-label={`Player ${side + 1} turn action`}
-                    value={choices[side]}
-                    disabled={!inspection}
-                    onChange={(e) => {
-                      const c = [...choices] as [string, string];
-                      c[side] = e.target.value;
-                      setChoices(c);
-                    }}
-                  >
-                    {inspection?.actions[side].map((a) => (
-                      <option key={a.index} value={a.choice}>
-                        #{a.index + 1} {a.description.join(' + ')}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              ))}
+              {[0, 1].map((side) =>
+                inspection && !inspection.needs_choice[side] ? (
+                  <div className="turn-waiting muted" key={side}>
+                    Player {side + 1} · Waiting
+                  </div>
+                ) : hasReserves &&
+                  inspection?.actions[side].some((a) => a.description.length === 2) ? (
+                  <SlotChoices
+                    key={side}
+                    actions={inspection.actions[side]}
+                    choice={choices[side]}
+                    side={side}
+                    onChange={(choice) => setSideChoice(side, choice)}
+                  />
+                ) : (
+                  <label key={side} className={'p' + side}>
+                    PLAYER {side + 1} JOINT ACTION
+                    <select
+                      aria-label={`Player ${side + 1} turn action`}
+                      value={choices[side]}
+                      disabled={!inspection}
+                      onChange={(e) => setSideChoice(side, e.target.value)}
+                    >
+                      {inspection?.actions[side].map((a) => (
+                        <option key={a.index} value={a.choice}>
+                          #{a.index + 1} {a.description.join(' + ')}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ),
+              )}
               <Num label="Turn RNG seed" value={turnSeed} max={4294967295} onChange={setTurnSeed} />
               <button
                 className="advance-button"
@@ -1337,7 +1504,7 @@ function Workspace({ cat }: { cat: Catalog }) {
                 onClick={advance}
               >
                 {advanceBusy ? <LoaderCircle size={15} className="spin" /> : <Swords size={15} />}
-                Advance
+                {replacement ? 'Send replacements' : 'Advance'}
                 <ArrowRight size={14} />
               </button>
             </div>

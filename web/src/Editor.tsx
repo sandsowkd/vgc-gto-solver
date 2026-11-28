@@ -194,7 +194,8 @@ export default function Editor({
         <header>
           <div>
             <span className={'eyebrow p' + side}>
-              PLAYER {side + 1} · SLOT {slot === 0 ? 'A' : 'B'}
+              PLAYER {side + 1} ·{' '}
+              {slot < 2 ? `SLOT ${slot === 0 ? 'A' : 'B'}` : `RESERVE ${slot - 1}`}
             </span>
             <h2>Edit Pokémon</h2>
           </div>
