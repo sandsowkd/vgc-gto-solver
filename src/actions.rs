@@ -39,13 +39,18 @@ pub fn describe(b: &Battle, side: usize, actions: &[JointAction]) -> Vec<ActionD
                 a.iter()
                     .enumerate()
                     .map(|(i, c)| match c {
+                        SlotChoice::Pass if b.request == RequestState::Switch => {
+                            "No replacement".into()
+                        }
                         SlotChoice::Pass => "pass (empty or fainted slot)".into(),
                         SlotChoice::Switch { index } => {
                             let team = &b.sides[side];
                             let incoming = b.dex.species(team.mons[*index].species).name.as_str();
                             if team.revival[i] {
                                 format!("Revive {incoming}")
-                            } else if let Some(outgoing) = team.mons.get(i) {
+                            } else if b.request == RequestState::Move
+                                && let Some(outgoing) = team.mons.get(i)
+                            {
                                 let name = &b.dex.species(outgoing.species).name;
                                 format!("Switch {name} → {incoming}")
                             } else {
